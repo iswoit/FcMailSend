@@ -101,6 +101,9 @@
     <EmbeddedResource Include="Control\BaseEditDialog.resx">
       <DependentUpon>BaseEditDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\MailFtpEditDialog.resx">
+      <DependentUpon>MailFtpEditDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control\MailFtpListDialog.resx">
       <DependentUpon>MailFtpListDialog.cs</DependentUpon>
     </EmbeddedResource>
