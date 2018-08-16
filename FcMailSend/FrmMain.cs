@@ -252,7 +252,7 @@ namespace FcMailSend
 
         private void menuEditProductAdd_Click(object sender, EventArgs e)
         {
-            using (ProductEditDialog dlg = new ProductEditDialog(Manager, null))
+            using (ProductEditDialog dlg = new ProductEditDialog(0))
             {
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
@@ -273,7 +273,7 @@ namespace FcMailSend
             if (lvi != null)
             {
                 Product product = (Product)lvi.Tag;
-                using (ProductEditDialog dlg = new ProductEditDialog(Manager, product))
+                using (ProductEditDialog dlg = new ProductEditDialog(product.Id))
                 {
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
@@ -287,7 +287,7 @@ namespace FcMailSend
         {
             using (MailFtpListDialog dlg = new MailFtpListDialog(Manager))
             {
-                if(dlg.ShowDialog()==DialogResult.OK)
+                if (dlg.ShowDialog() == DialogResult.OK)
                 {
 
                 }

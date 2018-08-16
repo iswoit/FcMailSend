@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
+using System.Configuration;
 
 namespace FcMailSend
 {
@@ -51,10 +52,10 @@ namespace FcMailSend
                                 bool disable = bool.Parse(dr["Disable"].ToString());
 
                                 // 获取附件列表
-                                ProductAttachment productAttachment = ReadProductAttachment(id, cn);
+                                ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
 
                                 // 获取收件人列表
-                                ProductMailReceiver productMailReceiver = ReadProductMailReceiver(id, cn);
+                                ProductReceiverList receiverList = ReadProductReceiver(id, cn);
 
                                 Product product = new Product(
                                     id,
@@ -63,8 +64,8 @@ namespace FcMailSend
                                     mailContent,
                                     lastSendTime,
                                     disable,
-                                    productAttachment,
-                                    productMailReceiver);
+                                    attList,
+                                    receiverList);
 
                                 productList.Add(product);
                             }//eof while
@@ -81,36 +82,125 @@ namespace FcMailSend
         }
 
 
-        // 读取产品附件列表
-        private static ProductAttachment ReadProductAttachment(int id, SQLiteConnection conn)
+        /// <summary>
+        /// 读取一个产品
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Product ReadProduct(int id)
         {
-            ProductAttachment productAttachment = new ProductAttachment();
+            Product product = null;
 
-            string query = string.Format("select * from ProductAttachment where ProductID='{0}';", id);
-            using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+            try
             {
-                using (SQLiteDataReader dr = cmd.ExecuteReader())
+                using (SQLiteConnection cn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
-                    while (dr.Read())
+                    cn.Open();
+
+                    using (SQLiteCommand cmd = new SQLiteCommand(cn))
                     {
-                        // 获取产品基本信息
-                        string attachmentPath = dr["AttachmentPath"].ToString();
+                        cmd.CommandText = "select * from Product where ID=@ID";
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", id));
 
-                        productAttachment.Add(attachmentPath);
-                    }//eof while
-                }//eof dr
-            }//eof cmd
+                        using (SQLiteDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
 
-            return productAttachment;
+                                string productName = dr["ProductName"].ToString();
+                                string mailTitle = dr["MailTitle"].ToString();
+                                string mailContent = dr["MailContent"].ToString();
+                                DateTime? lastSendTime;
+                                if (Convert.IsDBNull(dr["LastSendTime"]))
+                                    lastSendTime = null;
+                                else
+                                    lastSendTime = DateTime.Parse(dr["LastSendTime"].ToString());
+                                bool disable = bool.Parse(dr["Disable"].ToString());
+
+                                // 获取附件列表
+                                ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
+
+                                // 获取收件人列表
+                                ProductReceiverList receiverList = ReadProductReceiver(id, cn);
+
+                                product = new Product(
+                                    id,
+                                    productName,
+                                    mailTitle,
+                                    mailContent,
+                                    lastSendTime,
+                                    disable,
+                                    attList,
+                                    receiverList);
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format(@"记录ID[{0}]不存在!", id));
+                            }
+                        }//eof dr
+                    }//eof cmd
+                }//eof conn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return product;
         }
 
 
-        // 读取产品收件人列表
-        private static ProductMailReceiver ReadProductMailReceiver(int id, SQLiteConnection conn)
+        /// <summary>
+        /// 读取id对应的附件列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        private static ProductAttachmentList ReadProductAttachmentList(int id, SQLiteConnection conn)
         {
-            ProductMailReceiver productMailReceiver = new ProductMailReceiver();
+            ProductAttachmentList attList = new ProductAttachmentList();
 
-            string query = string.Format("select * from ProductMailReceiver where ProductID='{0}';", id);
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = "select * from ProductAttachment where ProductID=@ProductID;";
+                cmd.Parameters.Add(new SQLiteParameter("@ProductID", id));
+
+                using (SQLiteDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        // 获取产品基本信息
+                        int productID = int.Parse(dr["ProductID"].ToString());
+                        AttachmentType type = (AttachmentType)Enum.Parse(typeof(AttachmentType), dr["AttachmentType"].ToString());
+                        string path = dr["AttachmentPath"].ToString();
+                        int? ftpID = null;
+                        if (Convert.IsDBNull(dr["FtpID"]))
+                            ftpID = null;
+                        else
+                            ftpID = int.Parse(dr["FtpID"].ToString());
+
+                        ProductAttachment att = new ProductAttachment(productID, type, path, ftpID);
+                        attList.Add(att);
+                    }//eof while
+                }//eof dr
+            }//eof cmd
+
+            return attList;
+        }
+
+
+        /// <summary>
+        /// 读取id对应的收件人列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        private static ProductReceiverList ReadProductReceiver(int id, SQLiteConnection conn)
+        {
+            ProductReceiverList receiverList = new ProductReceiverList();
+
+            string query = string.Format("select * from ProductReceiver where ProductID='{0}';", id);
             using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
             {
                 using (SQLiteDataReader dr = cmd.ExecuteReader())
@@ -118,14 +208,17 @@ namespace FcMailSend
                     while (dr.Read())
                     {
                         // 获取产品基本信息
+                        int productID = int.Parse(dr["ProductID"].ToString());
                         string emailAddress = dr["EmailAddress"].ToString();
+                        ReceiverType receiverType = (ReceiverType)Enum.Parse(typeof(ReceiverType), dr["ReceiverType"].ToString());
 
-                        productMailReceiver.Add(emailAddress);
+                        ProductReceiver receiver = new ProductReceiver(productID, emailAddress, receiverType);
+                        receiverList.Add(receiver);
                     }//eof while
                 }//eof dr
             }//eof cmd
 
-            return productMailReceiver;
+            return receiverList;
         }
 
     }

@@ -15,14 +15,14 @@ namespace FcMailSend
         private string _mailContent;                        // 邮件正文
         private DateTime? _lastSendTime;                    // 最后一次发送成功的时间（可以用来判断今天是否已经发送成功）
         private bool _disable = true;                       // 是否禁用(默认不启用)
-        private ProductAttachment _productAttachment;       // 附件列表
-        private ProductMailReceiver _productMailReceiver;   // 收件人列表
+        private ProductAttachmentList _attachmentList;      // 附件列表
+        private ProductReceiverList _receiverList;          // 收件人列表
 
         // 运行时变量
         private bool _isRunning = false;                    // 是否在运行
         private bool _isAttachmentOK = false;               // 附件是否已就绪
         private bool _isSendOK = false;                     // 是否发送完毕
-        private string _note = string.Empty;              // 状态说明文字
+        private string _note = string.Empty;                // 状态说明文字
 
 
         #region 属性
@@ -61,16 +61,16 @@ namespace FcMailSend
             set { _disable = value; }
         }
 
-        public ProductAttachment ProductAttachment
+        public ProductAttachmentList ProductAttachmentList
         {
-            get { return _productAttachment; }
-            set { _productAttachment = value; }
+            get { return _attachmentList; }
+            set { _attachmentList = value; }
         }
 
-        public ProductMailReceiver ProductMailReceiver
+        public ProductReceiverList ProductReceiverList
         {
-            get { return _productMailReceiver; }
-            set { _productMailReceiver = value; }
+            get { return _receiverList; }
+            set { _receiverList = value; }
         }
 
         public bool IsRunning
@@ -100,7 +100,7 @@ namespace FcMailSend
         #endregion
 
 
-        #region
+        #region 方法
         //构造函数
         public Product(int id,
             string productName,
@@ -108,8 +108,8 @@ namespace FcMailSend
             string mailContent,
             DateTime? lastSendTime,
             bool disable,
-            ProductAttachment productAttachment,
-            ProductMailReceiver productMailReceiver)
+            ProductAttachmentList attachmentList,
+            ProductReceiverList receiverList)
         {
             _id = id;
             _productName = productName;
@@ -117,8 +117,8 @@ namespace FcMailSend
             _mailContent = mailContent;
             _lastSendTime = lastSendTime;
             _disable = disable;
-            _productAttachment = productAttachment;
-            _productMailReceiver = productMailReceiver;
+            _attachmentList = attachmentList;
+            _receiverList = receiverList;
         }
 
         #endregion

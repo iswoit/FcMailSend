@@ -49,8 +49,23 @@ namespace FcMailSend
         #region 方法
         public Manager()
         {
+            ReloadMailSender();
+            ReloadFtpList();
+            ReloadProductList();
+        }
+
+        public void ReloadMailSender()
+        {
             _mailSender = MailSenderStorage.ReadMailSender(connStr);    // 读取发件人信息
+        }
+
+        public void ReloadFtpList()
+        {
             _mailFtpList = MailFtpStorage.ReadMailFtpList(connStr);     // 读取FTP信息
+        }
+
+        public void ReloadProductList()
+        {
             _productList = ProductStorage.ReadProductlist(connStr);     // 读取产品信息
         }
 
@@ -75,7 +90,7 @@ namespace FcMailSend
 
 
                 // 1.判断所有附件是否存在
-                if (product.ProductAttachment.Count <= 0)
+                if (product.ProductAttachmentList.Count <= 0)
                 {
                     product.IsRunning = false;
                     product.IsAttachmentOK = false;
@@ -86,11 +101,11 @@ namespace FcMailSend
                     continue;
                 }
                 List<string> missingAttachments = new List<string>();       // 缺失文件列表
-                foreach (string attachment in product.ProductAttachment)
+                foreach (ProductAttachment attachment in product.ProductAttachmentList)    //要改
                 {
-                    if (!File.Exists(attachment))
+                    if (!File.Exists(attachment.Path))
                     {
-                        missingAttachments.Add(attachment);
+                        missingAttachments.Add(attachment.Path);
                     }
                 }
                 if (missingAttachments.Count > 0)
@@ -121,7 +136,7 @@ namespace FcMailSend
 
 
                 // 2.开始发邮件
-                if (product.ProductMailReceiver.Count <= 0)
+                if (product.ProductReceiverList.Count <= 0)
                 {
                     product.IsRunning = false;
                     product.IsSendOK = false;
@@ -142,7 +157,6 @@ namespace FcMailSend
 
 
                 // msg对象
-
                 MailMessage msg = new MailMessage();
                 msg.From = new MailAddress(MailSender.Address, MailSender.DisplayName, Encoding.UTF8);   // 发件人信息
                 msg.Subject = product.ProductName + DateTime.Now.ToString("yyyyMMdd");  //邮件标题    
@@ -152,11 +166,31 @@ namespace FcMailSend
                 msg.IsBodyHtml = false;//是否是HTML邮件    
                 msg.Priority = MailSender.Priority;     //邮件优先级   
 
-                foreach (string receiver in product.ProductMailReceiver)    // 收件人
-                    msg.To.Add(receiver);
+                // 添加收件人
+                foreach (ProductReceiver receiver in product.ProductReceiverList) 
+                {
+                    switch(receiver.ReceiverType)
+                    {
+                        case ReceiverType.收件人:
+                            msg.To.Add(receiver.EmailAddress);
+                            break;
+                        case ReceiverType.抄送:
+                            msg.CC.Add(receiver.EmailAddress);
+                            break;
+                        case ReceiverType.密送:
+                            msg.Bcc.Add(receiver.EmailAddress);
+                            break;
+                        default:
+                            msg.To.Add(receiver.EmailAddress);
+                            break;
+                    }
+                }
+                    
 
-                foreach (string atta in product.ProductAttachment)      //附件
-                    msg.Attachments.Add(new Attachment(atta));
+                foreach (ProductAttachment atta in product.ProductAttachmentList)      //附件
+                    msg.Attachments.Add(new Attachment(atta.Path));
+
+                
 
                 try
                 {

@@ -78,6 +78,7 @@
             this.MinimizeBox = false;
             this.Name = "BaseEditDialog";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "BaseEditDialog";
             this.ResumeLayout(false);
 

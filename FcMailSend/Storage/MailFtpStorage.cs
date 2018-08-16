@@ -52,5 +52,110 @@ namespace FcMailSend
 
             return mailFtpList;
         }
+
+
+        /// <summary>
+        /// 新增FTP连接信息
+        /// </summary>
+        /// <param name="mailFtp"></param>
+        /// <param name="connStr"></param>
+        public static void AddMailFtp(MailFtp mailFtp, string connStr)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                {
+                    conn.Open();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+
+                        cmd.CommandText = string.Format(@"insert into MailFtp (FtpDesc, FtpServer, UserName, Password) values (@FtpDesc, @FtpServer, @UserName, @Password);");
+                        cmd.Parameters.Add(new SQLiteParameter("@FtpDesc", mailFtp.FtpDesc));
+                        cmd.Parameters.Add(new SQLiteParameter("@FtpServer", mailFtp.FtpServer));
+                        cmd.Parameters.Add(new SQLiteParameter("@UserName", mailFtp.UserName));
+                        cmd.Parameters.Add(new SQLiteParameter("@Password", mailFtp.Password));
+
+                        cmd.ExecuteNonQuery();
+
+                    }//eof cmd
+                }//eof cn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// 修改FTP连接信息
+        /// </summary>
+        /// <param name="mailFtp"></param>
+        /// <param name="connStr"></param>
+        public static void UpdateMailFtp(MailFtp mailFtp, string connStr)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                {
+                    conn.Open();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+
+                        cmd.CommandText = string.Format(@"update MailFtp set FtpDesc=@FtpDesc, FtpServer=@FtpServer, UserName=@UserName, Password=@Password where ID=@ID;");
+                        cmd.Parameters.Add(new SQLiteParameter("@FtpDesc", mailFtp.FtpDesc));
+                        cmd.Parameters.Add(new SQLiteParameter("@FtpServer", mailFtp.FtpServer));
+                        cmd.Parameters.Add(new SQLiteParameter("@UserName", mailFtp.UserName));
+                        cmd.Parameters.Add(new SQLiteParameter("@Password", mailFtp.Password));
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", mailFtp.Id));
+
+                        cmd.ExecuteNonQuery();
+
+                    }//eof cmd
+                }//eof cn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// 删除FTP连接信息
+        /// </summary>
+        /// <param name="mailFtp"></param>
+        /// <param name="connStr"></param>
+        public static void DelMailFtp(MailFtp mailFtp, string connStr)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                {
+                    conn.Open();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        // 判断是否有产品用到此连接，有的话不允许删除
+                        cmd.CommandText = string.Format(@"select count(1) from ProductAttachment where FtpID=@FtpID;");
+                        cmd.Parameters.Add(new SQLiteParameter("@FtpID", mailFtp.Id));
+                        int iCount = int.Parse(cmd.ExecuteScalar().ToString());
+                        if (iCount > 0)
+                            throw new Exception("目前仍有产品从此FTP下载文件, 无法删除!");
+
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = string.Format(@"delete from MailFtp where ID=@ID;");
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", mailFtp.Id));
+                        
+                        cmd.ExecuteNonQuery();
+
+                    }//eof cmd
+                }//eof cn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

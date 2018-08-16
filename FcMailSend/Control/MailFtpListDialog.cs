@@ -43,5 +43,82 @@ namespace FcMailSend
             }
             lvFtpList.EndUpdate();
         }
+
+        private void menuFtpAdd_Click(object sender, EventArgs e)
+        {
+            using (MailFtpEditDialog dlg = new MailFtpEditDialog(Manager, null))
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    Manager.ReloadFtpList();
+                    ResetDialog();
+                }
+            }
+
+        }
+
+        private void menuFtpEdit_Click(object sender, EventArgs e)
+        {
+            if (lvFtpList.SelectedItems.Count > 0)
+            {
+                ListViewItem lvi = lvFtpList.SelectedItems[0];
+                if (lvi != null)
+                {
+                    MailFtp mailFtp = (MailFtp)lvi.Tag;
+                    using (MailFtpEditDialog dlg = new MailFtpEditDialog(Manager, mailFtp))
+                    {
+                        if (dlg.ShowDialog() == DialogResult.OK)
+                        {
+                            Manager.ReloadFtpList();
+                            ResetDialog();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ctxMailFtp_Opening(object sender, CancelEventArgs e)
+        {
+            // 邮件没选中不弹出
+            int iCount = lvFtpList.SelectedItems.Count;
+            if (iCount <= 0)
+            {
+                menuFtpEdit.Enabled = false;
+                menuFtpDel.Enabled = false;
+            }
+            else
+            {
+                menuFtpEdit.Enabled = true;
+                menuFtpDel.Enabled = true;
+            }
+
+        }
+
+        private void menuFtpDel_Click(object sender, EventArgs e)
+        {
+            if (lvFtpList.SelectedItems.Count > 0)
+            {
+                MailFtp mailFtp = (MailFtp)lvFtpList.SelectedItems[0].Tag;
+
+                DialogResult dr = MessageBox.Show("确定删除此条连接?", "确定", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MailFtpStorage.DelMailFtp(mailFtp, Manager.ConnStr);
+                        MessageBox.Show("已删除!");
+                        Manager.ReloadFtpList();
+                        ResetDialog();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+
+
+
+        }
     }
 }

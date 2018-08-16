@@ -34,11 +34,11 @@
             this.chFtpDesc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chFtpServer = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chUserName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label1 = new System.Windows.Forms.Label();
             this.ctxMailFtp = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuFtpAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFtpEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFtpDel = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             this.ctxMailFtp.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +94,37 @@
             this.chUserName.Text = "用户名";
             this.chUserName.Width = 79;
             // 
+            // ctxMailFtp
+            // 
+            this.ctxMailFtp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuFtpAdd,
+            this.menuFtpEdit,
+            this.menuFtpDel});
+            this.ctxMailFtp.Name = "ctxMailFtp";
+            this.ctxMailFtp.Size = new System.Drawing.Size(154, 92);
+            this.ctxMailFtp.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMailFtp_Opening);
+            // 
+            // menuFtpAdd
+            // 
+            this.menuFtpAdd.Name = "menuFtpAdd";
+            this.menuFtpAdd.Size = new System.Drawing.Size(153, 22);
+            this.menuFtpAdd.Text = "新增FTP连接...";
+            this.menuFtpAdd.Click += new System.EventHandler(this.menuFtpAdd_Click);
+            // 
+            // menuFtpEdit
+            // 
+            this.menuFtpEdit.Name = "menuFtpEdit";
+            this.menuFtpEdit.Size = new System.Drawing.Size(153, 22);
+            this.menuFtpEdit.Text = "修改FTP连接...";
+            this.menuFtpEdit.Click += new System.EventHandler(this.menuFtpEdit_Click);
+            // 
+            // menuFtpDel
+            // 
+            this.menuFtpDel.Name = "menuFtpDel";
+            this.menuFtpDel.Size = new System.Drawing.Size(153, 22);
+            this.menuFtpDel.Text = "删除FTP连接";
+            this.menuFtpDel.Click += new System.EventHandler(this.menuFtpDel_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -103,41 +134,14 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "FTP服务器列表:";
             // 
-            // ctxMailFtp
-            // 
-            this.ctxMailFtp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuFtpAdd,
-            this.menuFtpEdit,
-            this.menuFtpDel});
-            this.ctxMailFtp.Name = "ctxMailFtp";
-            this.ctxMailFtp.Size = new System.Drawing.Size(154, 92);
-            // 
-            // menuFtpAdd
-            // 
-            this.menuFtpAdd.Name = "menuFtpAdd";
-            this.menuFtpAdd.Size = new System.Drawing.Size(153, 22);
-            this.menuFtpAdd.Text = "新增FTP连接...";
-            // 
-            // menuFtpEdit
-            // 
-            this.menuFtpEdit.Name = "menuFtpEdit";
-            this.menuFtpEdit.Size = new System.Drawing.Size(153, 22);
-            this.menuFtpEdit.Text = "修改FTP连接...";
-            // 
-            // menuFtpDel
-            // 
-            this.menuFtpDel.Name = "menuFtpDel";
-            this.menuFtpDel.Size = new System.Drawing.Size(153, 22);
-            this.menuFtpDel.Text = "删除FTP连接";
-            // 
-            // MailFtpEditDialog
+            // MailFtpListDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 373);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lvFtpList);
-            this.Name = "MailFtpEditDialog";
+            this.Name = "MailFtpListDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MailFtpEditDialog";
             this.Controls.SetChildIndex(this.btnOK, 0);

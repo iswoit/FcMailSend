@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace FcMailSend
 {
-    public class ProductMailReceiver : Collection<string>
+    public class ProductAttachmentList : Collection<ProductAttachment>
     {
     }
 }
