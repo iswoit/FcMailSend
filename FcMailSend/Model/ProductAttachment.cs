@@ -27,16 +27,41 @@ namespace FcMailSend
         public AttachmentType Type
         {
             get { return _type; }
+            set { _type = value; }
         }
 
         public string Path
         {
             get { return _path; }
+            set { _path = value; }
         }
 
         public int? FtpID
         {
             get { return _ftpID; }
+            set { _ftpID = value; }
+        }
+
+        /// <summary>
+        /// 显示的路径
+        /// </summary>
+        public string DisplayPath
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case AttachmentType.磁盘路径:
+                        return Path;
+                    case AttachmentType.FTP:
+                        {
+                            MailFtp ftp = MailFtpStorage.ReadMailFtp(FtpID.Value);
+                            return string.Format(@"ftp://{0}{1}", ftp.FtpServer, Path);
+                        }
+                    default:
+                        return Path;
+                }
+            }
         }
 
 

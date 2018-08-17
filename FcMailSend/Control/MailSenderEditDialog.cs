@@ -99,7 +99,7 @@ namespace FcMailSend
                 Manager.MailSender = new MailSender(host, port, enableSSL, address, password, timeout, displayName, priority, tailContent);
 
                 // 写数据库
-                MailSenderStorage.WriteMailSender(Manager.MailSender, Manager.ConnStr);
+                MailSenderStorage.WriteMailSender(Manager.MailSender);
 
                 MessageBox.Show("保存完成!");
             }

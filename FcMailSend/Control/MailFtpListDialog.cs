@@ -105,7 +105,7 @@ namespace FcMailSend
                 {
                     try
                     {
-                        MailFtpStorage.DelMailFtp(mailFtp, Manager.ConnStr);
+                        MailFtpStorage.DelMailFtp(mailFtp);
                         MessageBox.Show("已删除!");
                         Manager.ReloadFtpList();
                         ResetDialog();

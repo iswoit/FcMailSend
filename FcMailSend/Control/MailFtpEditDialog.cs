@@ -81,7 +81,7 @@ namespace FcMailSend
                 if (MailFtp == null)
                 {
                     MailFtp mailFtp = new MailFtp(0, ftpDesc, ftpServer, userName, password);
-                    MailFtpStorage.AddMailFtp(mailFtp, Manager.ConnStr);
+                    MailFtpStorage.AddMailFtp(mailFtp);
                 }
                 else
                 {
@@ -90,7 +90,7 @@ namespace FcMailSend
                     MailFtp.UserName = userName;
                     MailFtp.Password = password;
 
-                    MailFtpStorage.UpdateMailFtp(MailFtp, Manager.ConnStr);
+                    MailFtpStorage.UpdateMailFtp(MailFtp);
                 }
 
                 

@@ -43,6 +43,10 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ctxAttachment = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuAttachmentAdd = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAttachmentEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAttachmentDel = new System.Windows.Forms.ToolStripMenuItem();
             this.lvReceiver = new System.Windows.Forms.ListView();
             this.chReceiverNo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chReceiverEmailAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,6 +55,7 @@
             this.menuReceiverAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReceiverEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReceiverDel = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxAttachment.SuspendLayout();
             this.ctxReceiver.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -160,8 +165,11 @@
             this.columnHeader3,
             this.columnHeader1,
             this.columnHeader2});
+            this.lvAttachment.ContextMenuStrip = this.ctxAttachment;
+            this.lvAttachment.FullRowSelect = true;
             this.lvAttachment.GridLines = true;
             this.lvAttachment.Location = new System.Drawing.Point(77, 76);
+            this.lvAttachment.MultiSelect = false;
             this.lvAttachment.Name = "lvAttachment";
             this.lvAttachment.Size = new System.Drawing.Size(307, 92);
             this.lvAttachment.TabIndex = 13;
@@ -180,7 +188,38 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "路径";
-            this.columnHeader2.Width = 169;
+            this.columnHeader2.Width = 175;
+            // 
+            // ctxAttachment
+            // 
+            this.ctxAttachment.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuAttachmentAdd,
+            this.menuAttachmentEdit,
+            this.menuAttachmentDel});
+            this.ctxAttachment.Name = "ctxAttachment";
+            this.ctxAttachment.Size = new System.Drawing.Size(134, 70);
+            this.ctxAttachment.Opening += new System.ComponentModel.CancelEventHandler(this.ctxAttachment_Opening);
+            // 
+            // menuAttachmentAdd
+            // 
+            this.menuAttachmentAdd.Name = "menuAttachmentAdd";
+            this.menuAttachmentAdd.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentAdd.Text = "增加附件...";
+            this.menuAttachmentAdd.Click += new System.EventHandler(this.menuAttachmentAdd_Click);
+            // 
+            // menuAttachmentEdit
+            // 
+            this.menuAttachmentEdit.Name = "menuAttachmentEdit";
+            this.menuAttachmentEdit.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentEdit.Text = "修改附件...";
+            this.menuAttachmentEdit.Click += new System.EventHandler(this.menuAttachmentEdit_Click);
+            // 
+            // menuAttachmentDel
+            // 
+            this.menuAttachmentDel.Name = "menuAttachmentDel";
+            this.menuAttachmentDel.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentDel.Text = "删除附件";
+            this.menuAttachmentDel.Click += new System.EventHandler(this.menuAttachmentDel_Click);
             // 
             // lvReceiver
             // 
@@ -212,7 +251,7 @@
             // chReceiverType
             // 
             this.chReceiverType.Text = "收件人类型";
-            this.chReceiverType.Width = 77;
+            this.chReceiverType.Width = 72;
             // 
             // ctxReceiver
             // 
@@ -279,6 +318,7 @@
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.lvAttachment, 0);
             this.Controls.SetChildIndex(this.lvReceiver, 0);
+            this.ctxAttachment.ResumeLayout(false);
             this.ctxReceiver.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -309,5 +349,9 @@
         private System.Windows.Forms.ToolStripMenuItem menuReceiverAdd;
         private System.Windows.Forms.ToolStripMenuItem menuReceiverEdit;
         private System.Windows.Forms.ToolStripMenuItem menuReceiverDel;
+        private System.Windows.Forms.ContextMenuStrip ctxAttachment;
+        private System.Windows.Forms.ToolStripMenuItem menuAttachmentAdd;
+        private System.Windows.Forms.ToolStripMenuItem menuAttachmentEdit;
+        private System.Windows.Forms.ToolStripMenuItem menuAttachmentDel;
     }
 }

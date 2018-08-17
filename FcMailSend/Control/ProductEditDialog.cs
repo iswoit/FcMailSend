@@ -37,6 +37,9 @@ namespace FcMailSend
             ResetDialog();
         }
 
+        /// <summary>
+        /// 重置整个产品
+        /// </summary>
         protected override void ResetDialog()
         {
             Product product;
@@ -53,7 +56,7 @@ namespace FcMailSend
             cbDisable.Checked = Product.Disable;
 
             // 附件
-
+            ResetAttachmentList();
             // 收件人
             ResetReceiverList();
 
@@ -64,7 +67,9 @@ namespace FcMailSend
 
         }
 
-
+        /// <summary>
+        /// 刷新附件列表
+        /// </summary>
         private void ResetAttachmentList()
         {
             lvAttachment.Items.Clear();
@@ -75,14 +80,13 @@ namespace FcMailSend
             {
                 ListViewItem lvi = new ListViewItem((++idx).ToString());
                 lvi.SubItems.Add(att.Type.ToString());
-                lvi.SubItems.Add(att.Path);
+                lvi.SubItems.Add(att.DisplayPath);
                 lvi.Tag = att;
 
                 lvAttachment.Items.Add(lvi);
             }
             lvAttachment.EndUpdate();
         }
-
 
         /// <summary>
         /// 刷新收件人列表
@@ -105,18 +109,87 @@ namespace FcMailSend
             lvReceiver.EndUpdate();
         }
 
-
-        protected override void OnClosing(CancelEventArgs e)
+        /// <summary>
+        /// 附件菜单打开事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ctxAttachment_Opening(object sender, CancelEventArgs e)
         {
-            if (DialogResult == DialogResult.OK)
-                SaveSettings(e);
+            int iCount = lvAttachment.SelectedItems.Count;
+            if (iCount <= 0)
+            {
+                menuAttachmentEdit.Enabled = false;
+                menuAttachmentDel.Enabled = false;
+            }
+            else
+            {
+                menuAttachmentEdit.Enabled = true;
+                menuAttachmentDel.Enabled = true;
+            }
         }
 
-        private void SaveSettings(CancelEventArgs e)
+        /// <summary>
+        /// 附件增加（内存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuAttachmentAdd_Click(object sender, EventArgs e)
         {
-
+            ProductAttachment tmpAtt = new ProductAttachment(Product.Id, AttachmentType.磁盘路径, string.Empty, null);
+            using (ProductAttachmentEditDialog dlg = new ProductAttachmentEditDialog(Product.ProductAttachmentList, tmpAtt))
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    // 增加对象
+                    Product.ProductAttachmentList.Add(tmpAtt);
+                    // 刷新界面
+                    ResetAttachmentList();
+                }
+            }
         }
 
+        /// <summary>
+        /// 附件修改（内存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuAttachmentEdit_Click(object sender, EventArgs e)
+        {
+            if (lvAttachment.SelectedItems.Count > 0)
+            {
+                ProductAttachment att = (ProductAttachment)lvAttachment.SelectedItems[0].Tag;
+                using (ProductAttachmentEditDialog dlg = new ProductAttachmentEditDialog(Product.ProductAttachmentList, att))
+                {
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        // 刷新界面
+                        ResetAttachmentList();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 附件删除（内存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuAttachmentDel_Click(object sender, EventArgs e)
+        {
+            if (lvAttachment.SelectedItems.Count > 0)
+            {
+                ProductAttachment att = (ProductAttachment)lvAttachment.SelectedItems[0].Tag;
+                Product.ProductAttachmentList.Remove(att);   // 删除对象
+                ResetAttachmentList();   // 刷新界面
+            }
+        }
+
+        /// <summary>
+        /// 收件人菜单打开事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ctxReceiver_Opening(object sender, CancelEventArgs e)
         {
             int iCount = lvReceiver.SelectedItems.Count;
@@ -132,6 +205,11 @@ namespace FcMailSend
             }
         }
 
+        /// <summary>
+        /// 收件人增加（内存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuReceiverAdd_Click(object sender, EventArgs e)
         {
             ProductReceiver tmpReceiver = new ProductReceiver(Product.Id, string.Empty, ReceiverType.收件人);
@@ -149,6 +227,11 @@ namespace FcMailSend
             }
         }
 
+        /// <summary>
+        /// 收件人修改（内存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuReceiverEdit_Click(object sender, EventArgs e)
         {
             if (lvReceiver.SelectedItems.Count > 0)
@@ -164,13 +247,10 @@ namespace FcMailSend
                     }
                 }
             }
-
-
         }
 
-
         /// <summary>
-        /// 收件人删除(只是内存对象)
+        /// 收件人删除(内存)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -181,6 +261,38 @@ namespace FcMailSend
                 ProductReceiver receiver = (ProductReceiver)lvReceiver.SelectedItems[0].Tag;
                 Product.ProductReceiverList.Remove(receiver);   // 删除对象
                 ResetReceiverList();    // 刷新界面
+            }
+        }
+
+
+        /// <summary>
+        /// 关闭保存
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (DialogResult == DialogResult.OK)
+                SaveSettings(e);
+        }
+
+        private void SaveSettings(CancelEventArgs e)
+        {
+            Product.ProductName = txtProductName.Text;
+            Product.MailTitle = txtMailTitle.Text;
+            Product.Disable = cbDisable.Checked;
+            Product.MailContent = txtMailContent.Text.Replace(System.Environment.NewLine, "\n");
+
+            DialogResult dr = MessageBox.Show("确定提交修改?", "确定", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dr == DialogResult.Yes)
+            {
+                if (ProductID <= 0)    // 新增
+                {
+                    ProductStorage.AddProduct(Product);
+                }
+                else  // 修改
+                {
+
+                }
             }
         }
     }

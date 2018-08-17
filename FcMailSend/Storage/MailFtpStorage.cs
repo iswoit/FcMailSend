@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
+using System.Configuration;
 
 namespace FcMailSend
 {
@@ -10,15 +11,14 @@ namespace FcMailSend
         /// <summary>
         /// 读取FTP列表
         /// </summary>
-        /// <param name="connStr"></param>
         /// <returns></returns>
-        public static MailFtpList ReadMailFtpList(string connStr)
+        public static MailFtpList ReadMailFtpList()
         {
             MailFtpList mailFtpList = new MailFtpList();
 
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(connStr))
+                using (SQLiteConnection cn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     cn.Open();
 
@@ -55,15 +55,59 @@ namespace FcMailSend
 
 
         /// <summary>
+        /// 按照id读ftp
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MailFtp ReadMailFtp(int id)
+        {
+            MailFtp mailFtp;
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
+                {
+                    cn.Open();
+
+                    using (SQLiteCommand cmd = new SQLiteCommand(cn))
+                    {
+                        cmd.CommandText = "select * from MailFtp where ID=@ID";
+                        cmd.Parameters.Add(new SQLiteParameter("@ID", id));
+                        using (SQLiteDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (!dr.HasRows)
+                                throw new Exception("无数据");
+
+                            dr.Read();
+
+                            // 获取产品基本信息
+                            string ftpDesc = dr["FtpDesc"].ToString();
+                            string ftpServer = dr["FtpServer"].ToString();
+                            string userName = dr["UserName"].ToString();
+                            string password = dr["Password"].ToString();
+
+                            mailFtp = new MailFtp(id, ftpDesc, ftpServer, userName, password);
+
+                        }//eof dr
+                    }//eof cmd
+                }//eof conn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return mailFtp;
+        }
+
+        /// <summary>
         /// 新增FTP连接信息
         /// </summary>
         /// <param name="mailFtp"></param>
-        /// <param name="connStr"></param>
-        public static void AddMailFtp(MailFtp mailFtp, string connStr)
+        public static void AddMailFtp(MailFtp mailFtp)
         {
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                using (SQLiteConnection conn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     conn.Open();
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -91,12 +135,11 @@ namespace FcMailSend
         /// 修改FTP连接信息
         /// </summary>
         /// <param name="mailFtp"></param>
-        /// <param name="connStr"></param>
-        public static void UpdateMailFtp(MailFtp mailFtp, string connStr)
+        public static void UpdateMailFtp(MailFtp mailFtp)
         {
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                using (SQLiteConnection conn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     conn.Open();
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -125,12 +168,11 @@ namespace FcMailSend
         /// 删除FTP连接信息
         /// </summary>
         /// <param name="mailFtp"></param>
-        /// <param name="connStr"></param>
-        public static void DelMailFtp(MailFtp mailFtp, string connStr)
+        public static void DelMailFtp(MailFtp mailFtp)
         {
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                using (SQLiteConnection conn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     conn.Open();
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -145,7 +187,7 @@ namespace FcMailSend
                         cmd.Parameters.Clear();
                         cmd.CommandText = string.Format(@"delete from MailFtp where ID=@ID;");
                         cmd.Parameters.Add(new SQLiteParameter("@ID", mailFtp.Id));
-                        
+
                         cmd.ExecuteNonQuery();
 
                     }//eof cmd

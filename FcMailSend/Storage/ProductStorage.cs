@@ -12,21 +12,17 @@ namespace FcMailSend
     /// </summary>
     public class ProductStorage
     {
-        // 读取产品列表
-        public static ProductList ReadProductlist(string conStr)
-        {
-            ProductList productList = ReadProduct(conStr);
-            return productList;
-        }
-
-        // 读取产品
-        private static ProductList ReadProduct(string conStr)
+        /// <summary>
+        /// 读取产品列表
+        /// </summary>
+        /// <returns></returns>
+        public static ProductList ReadProductlist()
         {
             ProductList productList = new ProductList();
 
             try
             {
-                using (SQLiteConnection cn = new SQLiteConnection(conStr))
+                using (SQLiteConnection cn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     cn.Open();
 
@@ -148,6 +144,78 @@ namespace FcMailSend
             }
 
             return product;
+        }
+
+
+        public static void AddProduct(Product product)
+        {
+            try
+            {
+                using (SQLiteConnection cn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
+                {
+                    cn.Open();
+                    using (SQLiteCommand cmd = new SQLiteCommand(cn))
+                    {
+                        cmd.CommandText = "select MAX(ID) from Product";
+                        object oldID = cmd.ExecuteScalar();
+                        int newID = 0;      // 新插入的ID
+                        if (Convert.IsDBNull(oldID))
+                            newID = 1;
+                        else
+                            newID = int.Parse(oldID.ToString()) + 1;
+
+                        using (SQLiteTransaction trans = cn.BeginTransaction())
+                        {
+                            try
+                            {
+                                // 插入product表
+                                cmd.Parameters.Clear();
+                                cmd.CommandText = "insert into Product(ID, ProductName, MailTitle, MailContent, Disable) values (@ID, @ProductName, @MailTitle, @MailContent,@Disable)";
+                                cmd.Parameters.Add(new SQLiteParameter("@ID", newID));
+                                cmd.Parameters.Add(new SQLiteParameter("@ProductName", product.ProductName));
+                                cmd.Parameters.Add(new SQLiteParameter("@MailTitle", product.MailTitle));
+                                cmd.Parameters.Add(new SQLiteParameter("@MailContent", product.MailContent));
+                                cmd.Parameters.Add(new SQLiteParameter("@Disable", product.Disable));
+                                cmd.ExecuteNonQuery();
+
+                                // 插入attachment表
+                                foreach (ProductAttachment att in product.ProductAttachmentList)
+                                {
+                                    cmd.Parameters.Clear();
+                                    cmd.CommandText = "insert into ProductAttachment(ProductID, AttachmentType, AttachmentPath, FtpID) values (@ProductID, @AttachmentType, @AttachmentPath, @FtpID)";
+                                    cmd.Parameters.Add(new SQLiteParameter("@ProductID", newID));
+                                    cmd.Parameters.Add(new SQLiteParameter("@AttachmentType", att.Type));
+                                    cmd.Parameters.Add(new SQLiteParameter("@AttachmentPath", att.Path));
+                                    cmd.Parameters.Add(new SQLiteParameter("@FtpID", att.FtpID));
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                // 插入receiver表
+                                foreach (ProductReceiver receiver in product.ProductReceiverList)
+                                {
+                                    cmd.Parameters.Clear();
+                                    cmd.CommandText = "insert into ProductReceiver(ProductID, EmailAddress, ReceiverType) values (@ProductID, @EmailAddress, @ReceiverType)";
+                                    cmd.Parameters.Add(new SQLiteParameter("@ProductID", newID));
+                                    cmd.Parameters.Add(new SQLiteParameter("@EmailAddress", receiver.EmailAddress));
+                                    cmd.Parameters.Add(new SQLiteParameter("@ReceiverType", receiver.ReceiverType));
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                trans.Commit();
+                            }
+                            catch(Exception ex)
+                            {
+                                trans.Rollback();
+                                throw new Exception(ex.Message);
+                            }
+                        }//eof using trans
+                    }//eof cmd
+                }//eof conn
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 

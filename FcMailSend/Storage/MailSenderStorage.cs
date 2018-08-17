@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
 using System.Net.Mail;
+using System.Configuration;
 
 namespace FcMailSend
 {
@@ -13,13 +14,13 @@ namespace FcMailSend
         /// </summary>
         /// <param name="connStr"></param>
         /// <returns></returns>
-        public static MailSender ReadMailSender(string connStr)
+        public static MailSender ReadMailSender()
         {
             MailSender mailSender = null;
 
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                using (SQLiteConnection conn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     conn.Open();
 
@@ -68,11 +69,11 @@ namespace FcMailSend
         /// </summary>
         /// <param name="mailSender">发件人</param>
         /// <param name="connStr">数据库连接串</param>
-        public static void WriteMailSender(MailSender mailSender, string connStr)
+        public static void WriteMailSender(MailSender mailSender)
         {
             try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connStr))
+                using (SQLiteConnection conn = new SQLiteConnection(ConfigurationManager.AppSettings["conn"]))
                 {
                     conn.Open();
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))

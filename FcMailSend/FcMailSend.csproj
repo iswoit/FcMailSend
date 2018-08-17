@@ -113,6 +113,7 @@
     <Compile Include="Util\DoubleBufferListView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Util\Util.cs" />
     <EmbeddedResource Include="Control\BaseEditDialog.resx">
       <DependentUpon>BaseEditDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -124,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Control\MailSenderEditDialog.resx">
       <DependentUpon>MailSenderEditDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\ProductAttachmentEditDialog.resx">
+      <DependentUpon>ProductAttachmentEditDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Control\ProductEditDialog.resx">
       <DependentUpon>ProductEditDialog.cs</DependentUpon>

@@ -56,17 +56,17 @@ namespace FcMailSend
 
         public void ReloadMailSender()
         {
-            _mailSender = MailSenderStorage.ReadMailSender(connStr);    // 读取发件人信息
+            _mailSender = MailSenderStorage.ReadMailSender();    // 读取发件人信息
         }
 
         public void ReloadFtpList()
         {
-            _mailFtpList = MailFtpStorage.ReadMailFtpList(connStr);     // 读取FTP信息
+            _mailFtpList = MailFtpStorage.ReadMailFtpList();     // 读取FTP信息
         }
 
         public void ReloadProductList()
         {
-            _productList = ProductStorage.ReadProductlist(connStr);     // 读取产品信息
+            _productList = ProductStorage.ReadProductlist();     // 读取产品信息
         }
 
 

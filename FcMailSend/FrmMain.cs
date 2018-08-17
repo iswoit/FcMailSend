@@ -46,6 +46,9 @@ namespace FcMailSend
         }
 
 
+        /// <summary>
+        /// 初始化列表
+        /// </summary>
         private void DisplayProductList()
         {
 
@@ -91,6 +94,14 @@ namespace FcMailSend
             //}
         }
 
+        /// <summary>
+        /// 刷新列表
+        /// </summary>
+        private void ReloadProductList()
+        {
+            Manager.ReloadProductList();
+            DisplayProductList();
+        }
 
         private void UpdateProductList()
         {
@@ -238,18 +249,27 @@ namespace FcMailSend
             }
         }
 
-
-
-        private void ctxFcMailSend_Opening(object sender, CancelEventArgs e)
+        /// <summary>
+        /// 编辑-修改ftp信息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuEditMailFtp_Click(object sender, EventArgs e)
         {
-            // 邮件没选中不弹出
-            int iCount = lvProductList.SelectedItems.Count;
-            if (iCount <= 0)
-                e.Cancel = true;
+            using (MailFtpListDialog dlg = new MailFtpListDialog(Manager))
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+
+                }
+            }
         }
 
-
-
+        /// <summary>
+        /// 编辑-新增产品
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menuEditProductAdd_Click(object sender, EventArgs e)
         {
             using (ProductEditDialog dlg = new ProductEditDialog(0))
@@ -257,18 +277,21 @@ namespace FcMailSend
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     // 刷新列表
+                    ReloadProductList();
                 }
             }
         }
 
-
         /// <summary>
-        /// 修改产品参数
+        /// 编辑-修改产品
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void menuEditProductEdit_Click(object sender, EventArgs e)
         {
+            if (lvProductList.SelectedItems.Count <= 0)
+                return;
+
             ListViewItem lvi = lvProductList.SelectedItems[0];
             if (lvi != null)
             {
@@ -283,14 +306,19 @@ namespace FcMailSend
             }
         }
 
-        private void menuEditMailFtp_Click(object sender, EventArgs e)
-        {
-            using (MailFtpListDialog dlg = new MailFtpListDialog(Manager))
-            {
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
 
-                }
+
+        private void menuEdit_DropDownOpening(object sender, EventArgs e)
+        {
+            if (lvProductList.SelectedItems.Count > 0)
+            {
+                menuEditProductEdit.Enabled = true;
+                menuEditProductDel.Enabled = true;
+            }
+            else
+            {
+                menuEditProductEdit.Enabled = false;
+                menuEditProductDel.Enabled = false;
             }
         }
     }
