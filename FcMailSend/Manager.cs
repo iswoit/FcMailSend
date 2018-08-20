@@ -275,7 +275,7 @@ namespace FcMailSend
                 // msg对象
                 MailMessage msg = new MailMessage();
                 msg.From = new MailAddress(MailSender.Address, MailSender.DisplayName, Encoding.UTF8);  // 发件人信息
-                msg.Subject = Util.ReplaceStringWithDateFormat(product.ProductName, date);              // 邮件标题    
+                msg.Subject = Util.ReplaceStringWithDateFormat(product.MailTitle, date);              // 邮件标题    
                 msg.SubjectEncoding = System.Text.Encoding.UTF8;                                        // 邮件标题编码    
                 msg.Body = Util.ReplaceStringWithDateFormat(product.MailContent + MailSender.TailContent, date);        //邮件内容    
                 msg.BodyEncoding = System.Text.Encoding.UTF8;                                           // 邮件内容编码    

@@ -43,6 +43,7 @@ namespace FcMailSend
 
 
         #region 变量
+        private Point preToolTipPoint = new Point(-1, -1);      // 提示框坐标
         private Manager _manager;
         #endregion
 
@@ -130,16 +131,8 @@ namespace FcMailSend
 
             lvProductList.EndUpdate();
 
-            //if (Manager.GetInstance().BankDistCollection.IsAllBankCopied)
-            //{
-            //    isAllOKLb.Text = "是";
-            //    isAllOKLb.ForeColor = Color.Green;
-            //}
-            //else
-            //{
-            //    isAllOKLb.Text = "否";
-            //    isAllOKLb.ForeColor = Color.Red;
-            //}
+            lbIsAllSendOK.Text = "N/A";
+            lbIsAllSendOK.ForeColor = Color.Black;
         }
 
         /// <summary>
@@ -194,6 +187,8 @@ namespace FcMailSend
 
             lvProductList.EndUpdate();
 
+            lbIsAllSendOK.Text = "N/A";
+            lbIsAllSendOK.ForeColor = Color.Black;
 
             //if ((Manager.GetInstance().IsRunning))
             //{
@@ -205,16 +200,7 @@ namespace FcMailSend
             //}
 
 
-            //if (Manager.GetInstance().BankDistCollection.IsAllBankCopied)
-            //{
-            //    isAllOKLb.Text = "是";
-            //    isAllOKLb.ForeColor = Color.Green;
-            //}
-            //else
-            //{
-            //    isAllOKLb.Text = "否";
-            //    isAllOKLb.ForeColor = Color.Red;
-            //}
+
         }
 
         private void btnSendAll_Click(object sender, EventArgs e)
@@ -229,10 +215,49 @@ namespace FcMailSend
                 else
                     date = dtpDate.Value.Date;
 
+                ProductList productListTmp = new ProductList();
+                switch (sendMode)
+                {
+                    case MailSendMode.重发所有产品:
+                        foreach (Product product in Manager.ProductList)
+                        {
+                            product.Note = string.Empty;
+                            productListTmp.Add(product);
+                        }
+                        break;
+                    case MailSendMode.只发送勾选的产品:
+                        foreach (ListViewItem lvi in lvProductList.Items)
+                        {
+                            if (lvi.Checked == true)
+                            {
+                                productListTmp.Add((Product)lvi.Tag);
+                            }
+                        }
+                        break;
+                    case MailSendMode.发送未发送的产品:
+                    default:
+                        foreach (Product product in Manager.ProductList)
+                        {
+                            if (product.IsSendOK == false)
+                            {
+                                productListTmp.Add(product);
+                            }
 
-                MailSendArgument arg = new MailSendArgument(sendMode, date);
+                            product.Note = string.Empty;
+                        }
+                        break;
+                }
 
+
+                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp);
+
+                lbIsAllSendOK.Text = "N/A";
+                lbIsAllSendOK.ForeColor = Color.Black;
                 btnSendAll.Text = "点击取消...";
+
+                // 禁用菜单
+                menuStrip.Enabled = false;
+
                 bwSendMail.RunWorkerAsync(arg);
             }
             else
@@ -252,38 +277,8 @@ namespace FcMailSend
 
             MailSendArgument arg = (MailSendArgument)e.Argument;
             // 根据模式筛选product
-            ProductList productListTmp = new ProductList();
-            switch (arg.SendMode)
-            {
+            ProductList productListTmp = arg.ProductList;
 
-                case MailSendMode.重发所有产品:
-                    foreach (Product product in Manager.ProductList)
-                    {
-                        productListTmp.Add(product);
-                    }
-                    break;
-                case MailSendMode.只发送勾选的产品:
-                    foreach (ListViewItem lvi in lvProductList.Items)
-                    {
-                        if (lvi.Checked == true)
-                        {
-                            productListTmp.Add((Product)lvi.Tag);
-                        }
-                    }
-                    break;
-                case MailSendMode.发送未发送的产品:
-                default:
-                    foreach (Product product in Manager.ProductList)
-                    {
-                        if (product.IsSendOK == false)
-                        {
-                            productListTmp.Add(product);
-                        }
-
-                        product.Note = string.Empty;
-                    }
-                    break;
-            }
 
             try
             {
@@ -323,7 +318,19 @@ namespace FcMailSend
                 Print_Message(string.Format(@"邮件发送完成. 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCount, Manager.ProductList.Count, Manager.ProductList.IsAllSendOK ? "√" : "×"));
             }
 
+            if (Manager.ProductList.IsAllSendOK == true)
+            {
+                lbIsAllSendOK.Text = "是";
+                lbIsAllSendOK.ForeColor = Color.Green;
+            }
+            else
+            {
+                lbIsAllSendOK.Text = "否";
+                lbIsAllSendOK.ForeColor = Color.Red;
+            }
+
             btnSendAll.Text = "发送邮件";
+            menuStrip.Enabled = true;
         }
 
 
@@ -516,6 +523,31 @@ namespace FcMailSend
             // 更新日期
             ProductStorage.UpdateProductListOKFlag(Manager.ProductList, dtpDate.Value.Date);
             DisplayProductList();
+        }
+
+        /// <summary>
+        /// 鼠标提示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lvProductList_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                // 防止闪烁
+                if (preToolTipPoint.X != e.X || preToolTipPoint.Y != e.Y)
+                {
+                    ListViewItem lvi = lvProductList.GetItemAt(e.X, e.Y);
+                    if (lvi != null)
+                        toolTip.Show(((Product)lvi.Tag).Note, lvProductList, new Point(e.X + 30, e.Y + 20), 200000);
+                    else
+                        toolTip.Hide(lvProductList);
+                }
+
+                preToolTipPoint = e.Location;
+            }
+            catch
+            { }
         }
     }
 }

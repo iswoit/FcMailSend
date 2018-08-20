@@ -15,6 +15,7 @@ namespace FcMailSend
     {
         private MailSendMode _sendMode;
         private DateTime _date;
+        private ProductList _productList;
 
         public MailSendMode SendMode
         {
@@ -26,11 +27,17 @@ namespace FcMailSend
             get { return _date; }
         }
 
+        public ProductList ProductList
+        {
+            get { return _productList; }
+        }
 
-        public MailSendArgument(MailSendMode mode,DateTime date)
+
+        public MailSendArgument(MailSendMode mode,DateTime date,ProductList productList)
         {
             _sendMode = mode;
             _date = date;
+            _productList = productList;
         }
     }
 }

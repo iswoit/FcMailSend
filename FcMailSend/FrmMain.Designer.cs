@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btnSendAll = new System.Windows.Forms.Button();
             this.bwSendMail = new System.ComponentModel.BackgroundWorker();
@@ -66,6 +67,9 @@
             this.PFileOK = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PIsSend = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbIsAllSendOK = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbProductSel.SuspendLayout();
@@ -74,9 +78,9 @@
             // btnSendAll
             // 
             this.btnSendAll.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSendAll.Location = new System.Drawing.Point(622, 357);
+            this.btnSendAll.Location = new System.Drawing.Point(622, 387);
             this.btnSendAll.Name = "btnSendAll";
-            this.btnSendAll.Size = new System.Drawing.Size(127, 57);
+            this.btnSendAll.Size = new System.Drawing.Size(127, 27);
             this.btnSendAll.TabIndex = 1;
             this.btnSendAll.Text = "发送邮件";
             this.btnSendAll.UseVisualStyleBackColor = true;
@@ -354,6 +358,7 @@
             this.lvProductList.TabIndex = 0;
             this.lvProductList.UseCompatibleStateImageBehavior = false;
             this.lvProductList.View = System.Windows.Forms.View.Details;
+            this.lvProductList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvProductList_MouseMove);
             // 
             // PNo
             // 
@@ -363,7 +368,7 @@
             // PName
             // 
             this.PName.Text = "产品名称";
-            this.PName.Width = 210;
+            this.PName.Width = 127;
             // 
             // PIsEnable
             // 
@@ -384,13 +389,40 @@
             // PStatus
             // 
             this.PStatus.Text = "状态说明";
-            this.PStatus.Width = 262;
+            this.PStatus.Width = 344;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(627, 365);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "完成:";
+            // 
+            // lbIsAllSendOK
+            // 
+            this.lbIsAllSendOK.AutoSize = true;
+            this.lbIsAllSendOK.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbIsAllSendOK.Location = new System.Drawing.Point(668, 361);
+            this.lbIsAllSendOK.Name = "lbIsAllSendOK";
+            this.lbIsAllSendOK.Size = new System.Drawing.Size(35, 16);
+            this.lbIsAllSendOK.TabIndex = 15;
+            this.lbIsAllSendOK.Text = "N/A";
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 50000;
+            this.toolTip.InitialDelay = 500;
+            this.toolTip.ReshowDelay = 100;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(763, 429);
+            this.Controls.Add(this.lbIsAllSendOK);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.gbProductSel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cbSendMode);
@@ -456,6 +488,9 @@
         private System.Windows.Forms.Button btnProductCheckAll;
         private System.Windows.Forms.Button btnProductCheckReverse;
         private System.Windows.Forms.GroupBox gbProductSel;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbIsAllSendOK;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 
