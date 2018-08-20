@@ -13,7 +13,6 @@ namespace FcMailSend
         private string _productName;                        // 产品名称
         private string _mailTitle;                          // 邮件名称
         private string _mailContent;                        // 邮件正文
-        private DateTime? _lastSendTime;                    // 最后一次发送成功的时间（可以用来判断今天是否已经发送成功）
         private bool _disable = true;                       // 是否禁用(默认不启用)
         private ProductAttachmentList _attachmentList;      // 附件列表
         private ProductReceiverList _receiverList;          // 收件人列表
@@ -49,11 +48,6 @@ namespace FcMailSend
             set { _mailContent = value; }
         }
 
-        public DateTime? LastSendTime
-        {
-            get { return _lastSendTime; }
-            set { _lastSendTime = value; }
-        }
 
         public bool Disable
         {
@@ -106,7 +100,6 @@ namespace FcMailSend
             string productName,
             string mailTitle,
             string mailContent,
-            DateTime? lastSendTime,
             bool disable,
             ProductAttachmentList attachmentList,
             ProductReceiverList receiverList)
@@ -115,7 +108,6 @@ namespace FcMailSend
             _productName = productName;
             _mailTitle = mailTitle;
             _mailContent = mailContent;
-            _lastSendTime = lastSendTime;
             _disable = disable;
             _attachmentList = attachmentList;
             _receiverList = receiverList;

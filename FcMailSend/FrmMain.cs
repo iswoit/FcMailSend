@@ -11,6 +11,37 @@ namespace FcMailSend
 {
     public partial class FrmMain : Form
     {
+        /// <summary>
+        /// 发送模式键值对
+        /// </summary>
+        public class ComboBoxSendModeItem
+        {
+            private string _Text;
+            private MailSendMode _Value;
+
+            public ComboBoxSendModeItem(string sText, MailSendMode sValue)
+            {
+                this._Text = sText;
+                this._Value = sValue;
+            }
+
+            public string Text
+            {
+                get { return _Text; }
+            }
+
+            public MailSendMode Value
+            {
+                get { return _Value; }
+            }
+
+            public override string ToString()
+            {
+                return this.Text;
+            }
+        }
+
+
         #region 变量
         private Manager _manager;
         #endregion
@@ -42,7 +73,22 @@ namespace FcMailSend
                 MessageBox.Show(msg, "发生异常");
             }
 
+            // 初始化产品列表
             DisplayProductList();
+
+            // 日期选择为当天
+            rbDateToday.Checked = true;
+
+            // 发送模式列表框
+            cbSendMode.Items.Clear();
+            foreach (MailSendMode sendMode in Enum.GetValues(typeof(MailSendMode)))
+            {
+                cbSendMode.Items.Add(new ComboBoxSendModeItem(sendMode.ToString(), sendMode));
+            }
+            if (cbSendMode.Items.Count > 0)
+            {
+                cbSendMode.SelectedIndex = 0;
+            }
         }
 
 
@@ -59,16 +105,18 @@ namespace FcMailSend
             {
                 ListViewItem lvi = new ListViewItem((++idx).ToString());
                 lvi.SubItems.Add(product.ProductName);
+                lvi.SubItems.Add(product.Disable == false ? "√" : "×");
                 lvi.SubItems.Add("×");
-                lvi.SubItems.Add("×");
+                lvi.SubItems.Add(product.IsSendOK ? "√" : "×");
                 lvi.SubItems.Add(string.Empty);
 
                 lvi.Tag = product;
+                //lvi.Checked = true;
 
-                //if (bankDist.IsFileAllCopied)
-                //    lvi.BackColor = SystemColors.Window;
-                //else
-                //    lvi.BackColor = Color.Pink;
+                if (product.IsSendOK)
+                    lvi.BackColor = SystemColors.Window;
+                else
+                    lvi.BackColor = Color.Pink;
 
                 lvProductList.Items.Add(lvi);
             }
@@ -103,6 +151,9 @@ namespace FcMailSend
             DisplayProductList();
         }
 
+        /// <summary>
+        /// 刷新列表
+        /// </summary>
         private void UpdateProductList()
         {
             lvProductList.BeginUpdate();
@@ -112,9 +163,9 @@ namespace FcMailSend
                 for (int i = 0; i < lvProductList.Items.Count; i++)
                 {
                     Product product = (Product)lvProductList.Items[i].Tag;
-                    lvProductList.Items[i].SubItems[2].Text = product.IsAttachmentOK ? "√" : "×";
-                    lvProductList.Items[i].SubItems[3].Text = product.IsSendOK ? "√" : "×"; ;
-                    lvProductList.Items[i].SubItems[4].Text = product.Note;
+                    lvProductList.Items[i].SubItems[3].Text = product.IsAttachmentOK ? "√" : "×";
+                    lvProductList.Items[i].SubItems[4].Text = product.IsSendOK ? "√" : "×"; ;
+                    lvProductList.Items[i].SubItems[5].Text = product.Note;
 
                     if (product.IsRunning)
                     {
@@ -123,7 +174,10 @@ namespace FcMailSend
                     }
                     else
                     {
-                        lvProductList.Items[i].BackColor = SystemColors.Window;
+                        if (product.IsSendOK)
+                            lvProductList.Items[i].BackColor = SystemColors.Window;
+                        else
+                            lvProductList.Items[i].BackColor = Color.Pink;
                     }
                 }
 
@@ -167,14 +221,23 @@ namespace FcMailSend
         {
             if (!bwSendMail.IsBusy)
             {
-                //executeBtn.Text = "执行中...";
-                bwSendMail.RunWorkerAsync();
+                // 获取参数对象
+                MailSendMode sendMode = ((ComboBoxSendModeItem)cbSendMode.SelectedItem).Value;
+                DateTime date;
+                if (rbDateToday.Checked)
+                    date = DateTime.Now.Date;
+                else
+                    date = dtpDate.Value.Date;
 
-                //Manager.GetInstance().IsRunning = true;
+
+                MailSendArgument arg = new MailSendArgument(sendMode, date);
+
+                btnSendAll.Text = "点击取消...";
+                bwSendMail.RunWorkerAsync(arg);
             }
             else
             {
-                //executeBtn.Text = "执行";
+                btnSendAll.Text = "发送邮件";
                 bwSendMail.CancelAsync();
             }
         }
@@ -187,9 +250,44 @@ namespace FcMailSend
              * 3.写sqlite、数据库
              */
 
+            MailSendArgument arg = (MailSendArgument)e.Argument;
+            // 根据模式筛选product
+            ProductList productListTmp = new ProductList();
+            switch (arg.SendMode)
+            {
+
+                case MailSendMode.重发所有产品:
+                    foreach (Product product in Manager.ProductList)
+                    {
+                        productListTmp.Add(product);
+                    }
+                    break;
+                case MailSendMode.只发送勾选的产品:
+                    foreach (ListViewItem lvi in lvProductList.Items)
+                    {
+                        if (lvi.Checked == true)
+                        {
+                            productListTmp.Add((Product)lvi.Tag);
+                        }
+                    }
+                    break;
+                case MailSendMode.发送未发送的产品:
+                default:
+                    foreach (Product product in Manager.ProductList)
+                    {
+                        if (product.IsSendOK == false)
+                        {
+                            productListTmp.Add(product);
+                        }
+
+                        product.Note = string.Empty;
+                    }
+                    break;
+            }
+
             try
             {
-                Manager.SendMail(sender as BackgroundWorker, e);
+                Manager.SendMail(productListTmp, arg.Date, sender as BackgroundWorker, e);
             }
             catch (Exception ex)
             {
@@ -204,7 +302,7 @@ namespace FcMailSend
             {
                 UpdateProductList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Print_Message(ex.Message);
             }
@@ -214,22 +312,18 @@ namespace FcMailSend
         {
             if (e.Error != null)    // 未处理的异常，需要弹框
             {
-                //Print_Message(e.Error.Message);
+                Print_Message(e.Error.Message);
             }
             else if (e.Cancelled)
             {
-                //Print_Message("任务被手工取消");
+                Print_Message("任务被手工取消");
             }
             else
             {
-                //Print_Message(string.Format(@"****执行完成 [进度: ({0}/{1}), 是否完成: {2}]****", Manager.GetInstance().BankDistCollection.OKCnt, Manager.GetInstance().BankDistCollection.Count, Manager.GetInstance().BankDistCollection.IsAllBankCopied ? "是" : "否"));
+                Print_Message(string.Format(@"邮件发送完成. 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCount, Manager.ProductList.Count, Manager.ProductList.IsAllSendOK ? "√" : "×"));
             }
 
-            //Manager.GetInstance().IsRunning = false;
-            //executeBtn.Text = "执行";
-
-            // 最后刷新
-
+            btnSendAll.Text = "发送邮件";
         }
 
 
@@ -301,11 +395,40 @@ namespace FcMailSend
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
                         // 刷新列表
+                        ReloadProductList();
                     }
                 }
             }
         }
 
+
+        /// <summary>
+        /// 编辑-删除产品
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuEditProductDel_Click(object sender, EventArgs e)
+        {
+            if (lvProductList.SelectedItems.Count > 0)
+            {
+                Product product = (Product)lvProductList.SelectedItems[0].Tag;
+
+                DialogResult dr = MessageBox.Show(string.Format(@"确定删除产品[{0}]?", product.ProductName), "确定", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    try
+                    {
+                        ProductStorage.DeleteProduct(product);
+                        MessageBox.Show("产品已删除!");
+                        ReloadProductList();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
 
 
         private void menuEdit_DropDownOpening(object sender, EventArgs e)
@@ -320,6 +443,79 @@ namespace FcMailSend
                 menuEditProductEdit.Enabled = false;
                 menuEditProductDel.Enabled = false;
             }
+        }
+
+        private void menuFileExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnProductCheckAll_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem lvi in lvProductList.Items)
+                lvi.Checked = true;
+        }
+
+
+        private void btnProductCheckReverse_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem lvi in lvProductList.Items)
+                lvi.Checked = !lvi.Checked;
+        }
+
+        private void cbSendMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (((ComboBoxSendModeItem)cbSendMode.SelectedItem).Value)
+            {
+
+                case MailSendMode.只发送勾选的产品:
+                    lvProductList.CheckBoxes = true;
+                    foreach (Control control in gbProductSel.Controls)
+                    {
+                        if (control is Button)
+                            control.Enabled = true;
+                    }
+                    break;
+                default:
+                    lvProductList.CheckBoxes = false;
+                    foreach (Control control in gbProductSel.Controls)
+                    {
+                        if (control is Button)
+                            control.Enabled = false;
+                    }
+                    break;
+            }
+        }
+
+        private void rbDate_CheckedChanged(object sender, EventArgs e)
+        {
+            DateTime date = DateTime.Now.Date;
+            if (rbDateToday.Checked)
+            {
+                dtpDate.Enabled = false;
+                date = DateTime.Now.Date;
+            }
+            else if (rbDateOther.Checked)
+            {
+                dtpDate.Enabled = true;
+                date = dtpDate.Value.Date;
+            }
+
+            // 更新日期
+            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, date);
+            DisplayProductList();
+        }
+
+        private void Print_Message(string message)
+        {
+            txtLog.Text = string.Format("{0}:{1}", DateTime.Now.ToString("HH:mm:ss"), message) + System.Environment.NewLine + txtLog.Text;
+        }
+
+        private void dtpDate_ValueChanged(object sender, EventArgs e)
+        {
+            // 更新日期
+            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, dtpDate.Value.Date);
+            DisplayProductList();
         }
     }
 }

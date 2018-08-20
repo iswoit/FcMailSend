@@ -10,6 +10,32 @@ namespace FcMailSend
     /// </summary>
     public class ProductList : Collection<Product>
     {
+        public int FinishedCount
+        {
+            get
+            {
+                int iCount = 0;
+                foreach (Product product in this)
+                {
+                    if (product.IsSendOK)
+                        iCount++;
+                }
+                return iCount;
+            }
+        }
+
+        public bool IsAllSendOK
+        {
+            get
+            {
+                if (FinishedCount == this.Count)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+
         #region 方法
         public ProductList()
         {

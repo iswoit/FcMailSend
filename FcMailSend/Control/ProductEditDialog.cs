@@ -44,7 +44,14 @@ namespace FcMailSend
         {
             Product product;
             if (ProductID <= 0)
-                product = new Product(0, string.Empty, string.Empty, string.Empty, null, false, new ProductAttachmentList(), new ProductReceiverList());
+                product = new Product(
+                    0,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    false,
+                    new ProductAttachmentList(),
+                    new ProductReceiverList());
             else
                 product = ProductStorage.ReadProduct(ProductID);
             _product = product;
@@ -287,12 +294,32 @@ namespace FcMailSend
             {
                 if (ProductID <= 0)    // 新增
                 {
-                    ProductStorage.AddProduct(Product);
+                    try
+                    {
+                        ProductStorage.AddProduct(Product);
+                        MessageBox.Show("产品增加完成");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
                 else  // 修改
                 {
-
+                    try
+                    {
+                        ProductStorage.UpdateProduct(Product);
+                        MessageBox.Show("产品修改完成");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
     }
