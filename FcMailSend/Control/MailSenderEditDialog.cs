@@ -87,10 +87,12 @@ namespace FcMailSend
                     txtPort.Focus();
                     e.Cancel = true;
                 }
-            }
 
-            if (!e.Cancel)
-                SaveSettings(e);
+
+                if (!e.Cancel)
+                    SaveSettings(e);
+            }
+           
         }
 
 
