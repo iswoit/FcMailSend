@@ -270,7 +270,7 @@ namespace FcMailSend
                 client.EnableSsl = MailSender.EnableSSL;        // ssl加密
                 client.Credentials = new System.Net.NetworkCredential(MailSender.Address, MailSender.Password);
                 client.Timeout = MailSender.Timeout * 1000;     // 超时时间
-                
+
 
                 // msg对象
                 MailMessage msg = new MailMessage();
@@ -282,7 +282,7 @@ namespace FcMailSend
                 msg.IsBodyHtml = false;                                                                 // 是否是HTML邮件    
                 msg.Priority = MailSender.Priority;                                                     // 邮件优先级   
 
-                
+
 
                 // 添加收件人
                 foreach (ProductReceiver receiver in product.ProductReceiverList)
@@ -360,6 +360,18 @@ namespace FcMailSend
                 product.IsRunning = false;
                 bgWorker.ReportProgress(1);
             }
+
+
+            // 删除tmp目录
+            try
+            {
+                string tmpFile = Path.Combine(System.Environment.CurrentDirectory, "tmp");
+                if (Directory.Exists(tmpFile))
+                    Directory.Delete(tmpFile, true);
+            }
+            catch (Exception)
+            { }
+
         }
 
 
@@ -447,7 +459,7 @@ namespace FcMailSend
             }
         }
 
-       
+
 
         #endregion
     }

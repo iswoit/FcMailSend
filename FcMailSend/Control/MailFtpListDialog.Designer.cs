@@ -101,7 +101,7 @@
             this.menuFtpEdit,
             this.menuFtpDel});
             this.ctxMailFtp.Name = "ctxMailFtp";
-            this.ctxMailFtp.Size = new System.Drawing.Size(154, 92);
+            this.ctxMailFtp.Size = new System.Drawing.Size(154, 70);
             this.ctxMailFtp.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMailFtp_Opening);
             // 
             // menuFtpAdd
@@ -142,8 +142,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lvFtpList);
             this.Name = "MailFtpListDialog";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "MailFtpEditDialog";
+            this.Text = "FTP连接串信息";
             this.Controls.SetChildIndex(this.btnOK, 0);
             this.Controls.SetChildIndex(this.btnReset, 0);
             this.Controls.SetChildIndex(this.btnCancel, 0);

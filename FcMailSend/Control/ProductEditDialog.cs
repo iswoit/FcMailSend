@@ -272,6 +272,23 @@ namespace FcMailSend
         }
 
 
+        private bool ValidateProductName()
+        {
+            if (txtProductName.Text.Trim().Length < 0)
+                return false;
+
+            return true;
+        }
+
+        private bool ValidateMailTitle()
+        {
+            if (txtMailTitle.Text.Trim().Length < 0)
+                return false;
+
+            return true;
+        }
+
+
         /// <summary>
         /// 关闭保存
         /// </summary>
@@ -279,7 +296,48 @@ namespace FcMailSend
         protected override void OnClosing(CancelEventArgs e)
         {
             if (DialogResult == DialogResult.OK)
-                SaveSettings(e);
+            {
+                if (!ValidateProductName())
+                {
+                    DialogResult result = MessageBox.Show("[产品名称]不能为空", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtProductName.Focus();
+                    e.Cancel = true;
+                }
+                else if (!ValidateMailTitle())
+                {
+                    DialogResult result = MessageBox.Show("[邮件主题]不能为空", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtMailTitle.Focus();
+                    e.Cancel = true;
+                }
+                else if(Product.ProductAttachmentList.Count<0)
+                {
+                    DialogResult result = MessageBox.Show("[附件]至少要有一个", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    e.Cancel = true;
+                }
+                else if (Product.ProductReceiverList.Count < 0)
+                {
+                    DialogResult result = MessageBox.Show("[收件人]至少要有一个", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    e.Cancel = true;
+                }
+                else
+                {
+                    int iCount = 0;
+                    foreach(ProductReceiver receiver in Product.ProductReceiverList)
+                    {
+                        if (receiver.ReceiverType == ReceiverType.收件人)
+                            iCount++;
+                    }
+
+                    if (iCount <= 0)
+                    {
+                        DialogResult result = MessageBox.Show(@"[收件人]至少需要一个类型为'收件人'的地址", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        e.Cancel = true;
+                    }
+                }
+
+                if (!e.Cancel)
+                    SaveSettings(e);
+            }
         }
 
         private void SaveSettings(CancelEventArgs e)

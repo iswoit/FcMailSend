@@ -80,6 +80,7 @@
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPassword.Location = new System.Drawing.Point(94, 78);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(213, 21);
             this.txtPassword.TabIndex = 7;
             // 
@@ -158,7 +159,6 @@
             this.ClientSize = new System.Drawing.Size(338, 168);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MailFtpEditDialog";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MailFtpEditDialog";
             this.Controls.SetChildIndex(this.btnOK, 0);
             this.Controls.SetChildIndex(this.btnReset, 0);

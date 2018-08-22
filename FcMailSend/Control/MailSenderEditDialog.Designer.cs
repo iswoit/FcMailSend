@@ -262,6 +262,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtPassword.Location = new System.Drawing.Point(95, 103);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(306, 21);
             this.txtPassword.TabIndex = 15;
             // 

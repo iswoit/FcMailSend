@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace FcMailSend
@@ -76,6 +77,72 @@ namespace FcMailSend
         }
 
 
+        private void txtPath_Validating(object sender, CancelEventArgs e)
+        {
+            if (txtPath.Text.Trim().Length <= 0)
+                errorProvider.SetError(txtPath, "路径不能为空");
+            else
+                errorProvider.SetError(txtPath, string.Empty);
+        }
+
+
+        private bool ValidateFtpSel()
+        {
+            if (rdFtp.Checked && cbFtp.SelectedIndex < 0)
+                return false;
+
+            return true;
+        }
+
+        private bool ValidatePathLength()
+        {
+            if (txtPath.Text.Trim().Length > 0)
+                return true;
+            else
+                return false;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (DialogResult == DialogResult.OK)
+            {
+                if(!ValidateFtpSel())
+                {
+                    DialogResult result = MessageBox.Show("请选择FTP连接串", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cbFtp.Focus();
+                    e.Cancel = true;
+                }
+
+                else if (!ValidatePathLength())
+                {
+                    DialogResult result = MessageBox.Show("[路径]不能为空", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtPath.Focus();
+                    e.Cancel = true;
+                }
+            }
+
+            if (!e.Cancel)
+                SaveSettings(e);
+        }
+
+        private void SaveSettings(CancelEventArgs e)
+        {
+            if (rdPath.Checked)
+            {
+                Attachment.Type = AttachmentType.磁盘路径;
+                Attachment.FtpID = null;
+            }
+            else if (rdFtp.Checked)
+            {
+                Attachment.Type = AttachmentType.FTP;
+                Attachment.FtpID = ((ComboBoxFtpItem)cbFtp.SelectedItem).Value;
+            }
+
+            Attachment.Path = txtPath.Text;
+        }
+
+
+
         protected override void ResetDialog()
         {
             switch (Attachment.Type)
@@ -109,27 +176,6 @@ namespace FcMailSend
         }
 
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (DialogResult == DialogResult.OK)
-                SaveSettings(e);
-        }
-
-        private void SaveSettings(CancelEventArgs e)
-        {
-            if (rdPath.Checked)
-            {
-                Attachment.Type = AttachmentType.磁盘路径;
-                Attachment.FtpID = null;
-            }
-            else if (rdFtp.Checked)
-            {
-                Attachment.Type = AttachmentType.FTP;
-                Attachment.FtpID = ((ComboBoxFtpItem)cbFtp.SelectedItem).Value;
-            }
-
-            Attachment.Path = txtPath.Text;
-        }
 
         private void rdType_CheckedChanged(object sender, EventArgs e)
         {
@@ -138,5 +184,7 @@ namespace FcMailSend
             else if (rdFtp.Checked)
                 cbFtp.Enabled = true;
         }
+
+
     }
 }

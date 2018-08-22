@@ -13,6 +13,8 @@ namespace FcMailSend
         private string _actualPath;
         private bool _isExist;
 
+
+
         public string DisplayPath
         {
             get { return _displayPath; }

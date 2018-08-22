@@ -55,6 +55,7 @@ namespace FcMailSend
         }
         #endregion
 
+
         public FrmMain()
         {
             InitializeComponent();
@@ -292,6 +293,7 @@ namespace FcMailSend
 
         private void bwSendMail_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            
             // 更新listView
             try
             {
@@ -548,6 +550,17 @@ namespace FcMailSend
             }
             catch
             { }
+        }
+
+
+        /// <summary>
+        /// 查看-日志
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuViewSendLog_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cbFtp = new System.Windows.Forms.ComboBox();
@@ -36,8 +37,10 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // btnReset
@@ -109,11 +112,11 @@
             // 
             // txtPath
             // 
-            this.txtPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPath.Location = new System.Drawing.Point(74, 75);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(252, 21);
+            this.txtPath.Size = new System.Drawing.Size(224, 21);
             this.txtPath.TabIndex = 5;
+            this.txtPath.Validating += new System.ComponentModel.CancelEventHandler(this.txtPath_Validating);
             // 
             // label2
             // 
@@ -143,6 +146,11 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(329, 100);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
+            // errorProvider
+            // 
+            this.errorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.errorProvider.ContainerControl = this;
+            // 
             // ProductAttachmentEditDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -159,6 +167,7 @@
             this.panel1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -173,5 +182,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbFtp;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }
