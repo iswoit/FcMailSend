@@ -45,6 +45,7 @@ namespace FcMailSend
         #region 变量
         private Point preToolTipPoint = new Point(-1, -1);      // 提示框坐标
         private Manager _manager;
+        private ProductSearchDialog _searchDialog = null;
         #endregion
 
         #region 属性
@@ -52,6 +53,13 @@ namespace FcMailSend
         {
             get { return _manager; }
             set { _manager = value; }
+        }
+
+
+        private ProductSearchDialog SearchDialog
+        {
+            get { return _searchDialog; }
+            set { _searchDialog = value; }
         }
         #endregion
 
@@ -99,6 +107,9 @@ namespace FcMailSend
         /// </summary>
         private void DisplayProductList()
         {
+            // 初始化前先更新一遍状态
+            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, dtpDate.Value.Date);
+
 
             lvProductList.Items.Clear();
             lvProductList.BeginUpdate();
@@ -293,7 +304,7 @@ namespace FcMailSend
 
         private void bwSendMail_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            
+
             // 更新listView
             try
             {
@@ -511,7 +522,7 @@ namespace FcMailSend
             }
 
             // 更新日期
-            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, date);
+
             DisplayProductList();
         }
 
@@ -523,7 +534,6 @@ namespace FcMailSend
         private void dtpDate_ValueChanged(object sender, EventArgs e)
         {
             // 更新日期
-            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, dtpDate.Value.Date);
             DisplayProductList();
         }
 
@@ -560,6 +570,21 @@ namespace FcMailSend
         /// <param name="e"></param>
         private void menuViewSendLog_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void menuViewSearch_Click(object sender, EventArgs e)
+        {
+            if (SearchDialog == null || SearchDialog.IsDisposed)
+            {
+                SearchDialog = new ProductSearchDialog(this);
+                SearchDialog.Owner = this;
+            }
+
+            SearchDialog.StartPosition = FormStartPosition.Manual;
+            SearchDialog.Location = new Point(this.Location.X + this.Width, this.Location.Y);
+
+            SearchDialog.Show();
 
         }
     }

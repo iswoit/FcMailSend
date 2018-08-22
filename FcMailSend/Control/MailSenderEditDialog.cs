@@ -64,11 +64,32 @@ namespace FcMailSend
         }
 
 
+        private bool ValidatePort()
+        {
+            int iTmp;
+            if (!int.TryParse(txtPort.Text.Trim(), out iTmp))
+                return false;
+
+            if (iTmp >= 0 && iTmp <= 65535)
+                return true;
+            else
+                return false;
+        }
 
 
         protected override void OnClosing(CancelEventArgs e)
         {
             if (DialogResult == DialogResult.OK)
+            {
+                if (!ValidatePort())
+                {
+                    DialogResult result = MessageBox.Show("[端口]必须是0-65535之间的数字", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtPort.Focus();
+                    e.Cancel = true;
+                }
+            }
+
+            if (!e.Cancel)
                 SaveSettings(e);
         }
 

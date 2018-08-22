@@ -57,6 +57,9 @@
             this.btnProductCheckAll = new System.Windows.Forms.Button();
             this.btnProductCheckReverse = new System.Windows.Forms.Button();
             this.gbProductSel = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbIsAllSendOK = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.lvProductList = new FcMailSend.DoubleBufferListView();
             this.PNo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -64,9 +67,6 @@
             this.PFileOK = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PIsSend = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label3 = new System.Windows.Forms.Label();
-            this.lbIsAllSendOK = new System.Windows.Forms.Label();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbProductSel.SuspendLayout();
@@ -135,7 +135,7 @@
             // menuFileExit
             // 
             this.menuFileExit.Name = "menuFileExit";
-            this.menuFileExit.Size = new System.Drawing.Size(152, 22);
+            this.menuFileExit.Size = new System.Drawing.Size(116, 22);
             this.menuFileExit.Text = "关闭(&X)";
             this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
             // 
@@ -208,12 +208,14 @@
             this.menuViewSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             this.menuViewSearch.Size = new System.Drawing.Size(181, 22);
             this.menuViewSearch.Text = "搜索产品(&F)";
+            this.menuViewSearch.Click += new System.EventHandler(this.menuViewSearch_Click);
             // 
             // menuViewSendLog
             // 
+            this.menuViewSendLog.Enabled = false;
             this.menuViewSendLog.Name = "menuViewSendLog";
             this.menuViewSendLog.Size = new System.Drawing.Size(181, 22);
-            this.menuViewSendLog.Text = "产品发送日志(&L)";
+            this.menuViewSendLog.Text = "查看发送日志(&L)";
             this.menuViewSendLog.Click += new System.EventHandler(this.menuViewSendLog_Click);
             // 
             // menuHelp
@@ -227,7 +229,7 @@
             // menuHelpAbout
             // 
             this.menuHelpAbout.Name = "menuHelpAbout";
-            this.menuHelpAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuHelpAbout.Size = new System.Drawing.Size(116, 22);
             this.menuHelpAbout.Text = "关于(&A)";
             // 
             // groupBox1
@@ -321,6 +323,31 @@
             this.gbProductSel.TabStop = false;
             this.gbProductSel.Text = "产品勾选";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(627, 365);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "完成:";
+            // 
+            // lbIsAllSendOK
+            // 
+            this.lbIsAllSendOK.AutoSize = true;
+            this.lbIsAllSendOK.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbIsAllSendOK.Location = new System.Drawing.Point(668, 361);
+            this.lbIsAllSendOK.Name = "lbIsAllSendOK";
+            this.lbIsAllSendOK.Size = new System.Drawing.Size(35, 16);
+            this.lbIsAllSendOK.TabIndex = 15;
+            this.lbIsAllSendOK.Text = "N/A";
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 50000;
+            this.toolTip.InitialDelay = 500;
+            this.toolTip.ReshowDelay = 100;
+            // 
             // lvProductList
             // 
             this.lvProductList.CheckBoxes = true;
@@ -373,31 +400,6 @@
             this.PStatus.Text = "状态说明";
             this.PStatus.Width = 344;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(627, 365);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 12);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "完成:";
-            // 
-            // lbIsAllSendOK
-            // 
-            this.lbIsAllSendOK.AutoSize = true;
-            this.lbIsAllSendOK.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbIsAllSendOK.Location = new System.Drawing.Point(668, 361);
-            this.lbIsAllSendOK.Name = "lbIsAllSendOK";
-            this.lbIsAllSendOK.Size = new System.Drawing.Size(35, 16);
-            this.lbIsAllSendOK.TabIndex = 15;
-            this.lbIsAllSendOK.Text = "N/A";
-            // 
-            // toolTip
-            // 
-            this.toolTip.AutoPopDelay = 50000;
-            this.toolTip.InitialDelay = 500;
-            this.toolTip.ReshowDelay = 100;
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -432,8 +434,6 @@
         }
 
         #endregion
-
-        private DoubleBufferListView lvProductList;
         private System.Windows.Forms.ColumnHeader PNo;
         private System.Windows.Forms.ColumnHeader PName;
         private System.Windows.Forms.ColumnHeader PFileOK;
@@ -471,6 +471,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbIsAllSendOK;
         private System.Windows.Forms.ToolTip toolTip;
+        public DoubleBufferListView lvProductList;
     }
 }
 

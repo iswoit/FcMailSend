@@ -445,7 +445,7 @@ namespace FcMailSend
                             cmd.Parameters.Add(new SQLiteParameter("@ProductDate", date));
 
                             int res = int.Parse(cmd.ExecuteScalar().ToString());
-                            if (res > 1)
+                            if (res >= 1)
                                 product.IsSendOK = true;
                             else
                                 product.IsSendOK = false;
