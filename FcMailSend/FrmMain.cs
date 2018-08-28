@@ -609,5 +609,19 @@ namespace FcMailSend
                 }
             }
         }
+
+        /// <summary>
+        /// 帮助-关于
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuHelpAbout_Click(object sender, EventArgs e)
+        {
+            using (AboutDialog dlg = new AboutDialog())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                { }
+            }
+        }
     }
 }
