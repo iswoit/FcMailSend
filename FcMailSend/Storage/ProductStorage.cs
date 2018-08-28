@@ -423,6 +423,32 @@ namespace FcMailSend
 
 
         /// <summary>
+        /// 通过id获取产品名称
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public static string GetProductNameById(int id, SQLiteConnection conn)
+        {
+            string productName = string.Empty;
+
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = "select ProductName from Product where ID=@ID;";
+                cmd.Parameters.Add(new SQLiteParameter("@ID", id));
+
+                object res = cmd.ExecuteScalar();
+                if (res == null)
+                    productName = "N/A";
+                else
+                    productName = res.ToString();
+            }//eof cmd
+
+            return productName;
+        }
+
+
+        /// <summary>
         /// 获取发送OK标志(通过日志查询过往记录)
         /// </summary>
         /// <param name="productList"></param>

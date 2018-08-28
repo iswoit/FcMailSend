@@ -8,6 +8,7 @@ namespace FcMailSend
     {
         private int _id;
         private int _productID;
+        private string _productName;
         private DateTime _productDate;
         private bool _isSendOK;
         private string _note;
@@ -21,6 +22,10 @@ namespace FcMailSend
         public int ProductID
         {
             get { return _productID; }
+        }
+        public string ProductName
+        {
+            get { return _productName; }
         }
         public DateTime ProductDate
         {
@@ -40,10 +45,11 @@ namespace FcMailSend
         }
 
 
-        public ProductSendLog(int id, int productID, DateTime productDate, bool isSendOK, string note, DateTime opTime)
+        public ProductSendLog(int id, int productID,string productName, DateTime productDate, bool isSendOK, string note, DateTime opTime)
         {
             _id = id;
             _productID = productID;
+            _productName = productName;
             _productDate = productDate;
             _isSendOK = isSendOK;
             _note = note;

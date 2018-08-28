@@ -123,6 +123,12 @@
     <Compile Include="Control\ProductSearchDialog.Designer.cs">
       <DependentUpon>ProductSearchDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Control\ProductSendLogDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Control\ProductSendLogDialog.Designer.cs">
+      <DependentUpon>ProductSendLogDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\MailFtp.cs" />
     <Compile Include="Model\MailFtpList.cs" />
     <Compile Include="Model\MailSendArgument.cs" />
@@ -130,6 +136,7 @@
     <Compile Include="Model\ProductAttachmentTmp.cs" />
     <Compile Include="Model\ProductReceiver.cs" />
     <Compile Include="Model\ProductSendLog.cs" />
+    <Compile Include="Model\ProductSendLogList.cs" />
     <Compile Include="Storage\MailFtpStorage.cs" />
     <Compile Include="Storage\MailSenderStorage.cs" />
     <Compile Include="Model\MailSender.cs" />
@@ -176,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Control\ProductSearchDialog.resx">
       <DependentUpon>ProductSearchDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\ProductSendLogDialog.resx">
+      <DependentUpon>ProductSendLogDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>

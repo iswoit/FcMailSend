@@ -107,8 +107,17 @@ namespace FcMailSend
         /// </summary>
         private void DisplayProductList()
         {
+            DateTime date = DateTime.Now.Date;
+            if (rbDateToday.Checked)
+            {
+                date = DateTime.Now.Date;
+            }
+            else if (rbDateOther.Checked)
+            {
+                date = dtpDate.Value.Date;
+            }
             // 初始化前先更新一遍状态
-            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, dtpDate.Value.Date);
+            ProductStorage.UpdateProductListOKFlag(Manager.ProductList, date);
 
 
             lvProductList.Items.Clear();
@@ -563,16 +572,12 @@ namespace FcMailSend
         }
 
 
+
         /// <summary>
-        /// 查看-日志
+        /// 查看-搜索产品
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void menuViewSendLog_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void menuViewSearch_Click(object sender, EventArgs e)
         {
             if (SearchDialog == null || SearchDialog.IsDisposed)
@@ -586,6 +591,23 @@ namespace FcMailSend
 
             SearchDialog.Show();
 
+        }
+
+
+        /// <summary>
+        /// 查看-日志
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuViewSendLog_Click(object sender, EventArgs e)
+        {
+            using (ProductSendLogDialog dlg = new ProductSendLogDialog())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+
+                }
+            }
         }
     }
 }

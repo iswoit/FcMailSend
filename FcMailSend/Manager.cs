@@ -97,6 +97,7 @@ namespace FcMailSend
                     bgWorker.ReportProgress(1);
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         err,
@@ -118,6 +119,7 @@ namespace FcMailSend
                     product.Note = err;
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         err,
@@ -142,6 +144,7 @@ namespace FcMailSend
                     product.Note = err;
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         err,
@@ -204,6 +207,7 @@ namespace FcMailSend
                     product.Note = err;
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         err,
@@ -242,6 +246,7 @@ namespace FcMailSend
                     product.Note = err;                                         // 写日志
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         err,
@@ -323,6 +328,7 @@ namespace FcMailSend
 
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         true,
                         "发送完成",
@@ -338,6 +344,7 @@ namespace FcMailSend
 
                     ProductSendLogStorage.AddSendLog(new ProductSendLog(0,
                         product.Id,
+                        string.Empty,
                         date,
                         false,
                         "发送失败：" + ex.Message,

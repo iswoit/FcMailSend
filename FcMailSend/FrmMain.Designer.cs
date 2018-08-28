@@ -135,7 +135,7 @@
             // menuFileExit
             // 
             this.menuFileExit.Name = "menuFileExit";
-            this.menuFileExit.Size = new System.Drawing.Size(116, 22);
+            this.menuFileExit.Size = new System.Drawing.Size(152, 22);
             this.menuFileExit.Text = "关闭(&X)";
             this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
             // 
@@ -212,7 +212,6 @@
             // 
             // menuViewSendLog
             // 
-            this.menuViewSendLog.Enabled = false;
             this.menuViewSendLog.Name = "menuViewSendLog";
             this.menuViewSendLog.Size = new System.Drawing.Size(181, 22);
             this.menuViewSendLog.Text = "查看发送日志(&L)";
@@ -228,8 +227,9 @@
             // 
             // menuHelpAbout
             // 
+            this.menuHelpAbout.Enabled = false;
             this.menuHelpAbout.Name = "menuHelpAbout";
-            this.menuHelpAbout.Size = new System.Drawing.Size(116, 22);
+            this.menuHelpAbout.Size = new System.Drawing.Size(152, 22);
             this.menuHelpAbout.Text = "关于(&A)";
             // 
             // groupBox1
