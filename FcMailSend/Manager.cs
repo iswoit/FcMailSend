@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Net.Mail;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace FcMailSend
 {
@@ -318,6 +320,9 @@ namespace FcMailSend
                 {
                     product.Note = "正在发送...";
                     bgWorker.ReportProgress(1);
+
+
+                    ServicePointManager.ServerCertificateValidationCallback = delegate (Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) { return true; };
 
                     client.Send(msg);
                     //client.SendAsync(msg, userState);
