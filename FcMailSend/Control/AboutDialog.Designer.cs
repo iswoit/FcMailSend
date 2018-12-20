@@ -57,6 +57,8 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Name = "AboutDialog";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "关于...";
             this.ResumeLayout(false);
             this.PerformLayout();

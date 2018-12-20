@@ -14,6 +14,7 @@ namespace FcMailSend
         private string _mailTitle;                          // 邮件名称
         private string _mailContent;                        // 邮件正文
         private bool _disable = true;                       // 是否禁用(默认不启用)
+        private bool _isCredit = false;                     // 是否信用批次（默认关）
         private ProductAttachmentList _attachmentList;      // 附件列表
         private ProductReceiverList _receiverList;          // 收件人列表
 
@@ -53,6 +54,12 @@ namespace FcMailSend
         {
             get { return _disable; }
             set { _disable = value; }
+        }
+
+        public bool IsCredit
+        {
+            get { return _isCredit; }
+            set { _isCredit = value; }
         }
 
         public ProductAttachmentList ProductAttachmentList
@@ -102,7 +109,8 @@ namespace FcMailSend
             string mailContent,
             bool disable,
             ProductAttachmentList attachmentList,
-            ProductReceiverList receiverList)
+            ProductReceiverList receiverList,
+            bool isCredit)
         {
             _id = id;
             _productName = productName;
@@ -111,6 +119,7 @@ namespace FcMailSend
             _disable = disable;
             _attachmentList = attachmentList;
             _receiverList = receiverList;
+            _isCredit = isCredit;
         }
 
         #endregion

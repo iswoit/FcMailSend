@@ -60,10 +60,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lbIsAllSendOK = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnSendAllNoCredit = new System.Windows.Forms.Button();
+            this.cbShowNoCreditOnly = new System.Windows.Forms.CheckBox();
             this.lvProductList = new FcMailSend.DoubleBufferListView();
             this.PNo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.PIsEnable = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pIsCredit = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PFileOK = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PIsSend = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -75,9 +77,9 @@
             // btnSendAll
             // 
             this.btnSendAll.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSendAll.Location = new System.Drawing.Point(622, 387);
+            this.btnSendAll.Location = new System.Drawing.Point(617, 428);
             this.btnSendAll.Name = "btnSendAll";
-            this.btnSendAll.Size = new System.Drawing.Size(127, 27);
+            this.btnSendAll.Size = new System.Drawing.Size(142, 27);
             this.btnSendAll.TabIndex = 1;
             this.btnSendAll.Text = "发送邮件";
             this.btnSendAll.UseVisualStyleBackColor = true;
@@ -99,7 +101,7 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(374, 95);
+            this.txtLog.Size = new System.Drawing.Size(379, 138);
             this.txtLog.TabIndex = 2;
             // 
             // label1
@@ -120,7 +122,7 @@
             this.menuHelp});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(763, 25);
+            this.menuStrip.Size = new System.Drawing.Size(761, 24);
             this.menuStrip.TabIndex = 5;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -129,13 +131,13 @@
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFileExit});
             this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(58, 21);
+            this.menuFile.Size = new System.Drawing.Size(59, 20);
             this.menuFile.Text = "文件(&F)";
             // 
             // menuFileExit
             // 
             this.menuFileExit.Name = "menuFileExit";
-            this.menuFileExit.Size = new System.Drawing.Size(116, 22);
+            this.menuFileExit.Size = new System.Drawing.Size(112, 22);
             this.menuFileExit.Text = "关闭(&X)";
             this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
             // 
@@ -149,47 +151,47 @@
             this.menuEditProductEdit,
             this.menuEditProductDel});
             this.menuEdit.Name = "menuEdit";
-            this.menuEdit.Size = new System.Drawing.Size(59, 21);
+            this.menuEdit.Size = new System.Drawing.Size(59, 20);
             this.menuEdit.Text = "编辑(&E)";
             this.menuEdit.DropDownOpening += new System.EventHandler(this.menuEdit_DropDownOpening);
             // 
             // menuEditMailSender
             // 
             this.menuEditMailSender.Name = "menuEditMailSender";
-            this.menuEditMailSender.Size = new System.Drawing.Size(169, 22);
+            this.menuEditMailSender.Size = new System.Drawing.Size(172, 22);
             this.menuEditMailSender.Text = "修改发件人信息...";
             this.menuEditMailSender.Click += new System.EventHandler(this.menuEditMailSender_Click);
             // 
             // menuEditMailFtp
             // 
             this.menuEditMailFtp.Name = "menuEditMailFtp";
-            this.menuEditMailFtp.Size = new System.Drawing.Size(169, 22);
+            this.menuEditMailFtp.Size = new System.Drawing.Size(172, 22);
             this.menuEditMailFtp.Text = "FTP连接设置...";
             this.menuEditMailFtp.Click += new System.EventHandler(this.menuEditMailFtp_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(166, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(169, 6);
             // 
             // menuEditProductAdd
             // 
             this.menuEditProductAdd.Name = "menuEditProductAdd";
-            this.menuEditProductAdd.Size = new System.Drawing.Size(169, 22);
+            this.menuEditProductAdd.Size = new System.Drawing.Size(172, 22);
             this.menuEditProductAdd.Text = "新增产品发送...";
             this.menuEditProductAdd.Click += new System.EventHandler(this.menuEditProductAdd_Click);
             // 
             // menuEditProductEdit
             // 
             this.menuEditProductEdit.Name = "menuEditProductEdit";
-            this.menuEditProductEdit.Size = new System.Drawing.Size(169, 22);
+            this.menuEditProductEdit.Size = new System.Drawing.Size(172, 22);
             this.menuEditProductEdit.Text = "修改产品发送...";
             this.menuEditProductEdit.Click += new System.EventHandler(this.menuEditProductEdit_Click);
             // 
             // menuEditProductDel
             // 
             this.menuEditProductDel.Name = "menuEditProductDel";
-            this.menuEditProductDel.Size = new System.Drawing.Size(169, 22);
+            this.menuEditProductDel.Size = new System.Drawing.Size(172, 22);
             this.menuEditProductDel.Text = "删除产品发送...";
             this.menuEditProductDel.Click += new System.EventHandler(this.menuEditProductDel_Click);
             // 
@@ -199,21 +201,21 @@
             this.menuViewSearch,
             this.menuViewSendLog});
             this.查看VToolStripMenuItem.Name = "查看VToolStripMenuItem";
-            this.查看VToolStripMenuItem.Size = new System.Drawing.Size(60, 21);
+            this.查看VToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.查看VToolStripMenuItem.Text = "查看(&V)";
             // 
             // menuViewSearch
             // 
             this.menuViewSearch.Name = "menuViewSearch";
             this.menuViewSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.menuViewSearch.Size = new System.Drawing.Size(181, 22);
+            this.menuViewSearch.Size = new System.Drawing.Size(177, 22);
             this.menuViewSearch.Text = "搜索产品(&F)";
             this.menuViewSearch.Click += new System.EventHandler(this.menuViewSearch_Click);
             // 
             // menuViewSendLog
             // 
             this.menuViewSendLog.Name = "menuViewSendLog";
-            this.menuViewSendLog.Size = new System.Drawing.Size(181, 22);
+            this.menuViewSendLog.Size = new System.Drawing.Size(177, 22);
             this.menuViewSendLog.Text = "查看发送日志(&L)";
             this.menuViewSendLog.Click += new System.EventHandler(this.menuViewSendLog_Click);
             // 
@@ -222,13 +224,13 @@
             this.menuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuHelpAbout});
             this.menuHelp.Name = "menuHelp";
-            this.menuHelp.Size = new System.Drawing.Size(61, 21);
+            this.menuHelp.Size = new System.Drawing.Size(59, 20);
             this.menuHelp.Text = "帮助(&H)";
             // 
             // menuHelpAbout
             // 
             this.menuHelpAbout.Name = "menuHelpAbout";
-            this.menuHelpAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuHelpAbout.Size = new System.Drawing.Size(112, 22);
             this.menuHelpAbout.Text = "关于(&A)";
             this.menuHelpAbout.Click += new System.EventHandler(this.menuHelpAbout_Click);
             // 
@@ -237,7 +239,7 @@
             this.groupBox1.Controls.Add(this.dtpDate);
             this.groupBox1.Controls.Add(this.rbDateOther);
             this.groupBox1.Controls.Add(this.rbDateToday);
-            this.groupBox1.Location = new System.Drawing.Point(412, 354);
+            this.groupBox1.Location = new System.Drawing.Point(412, 400);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(194, 60);
             this.groupBox1.TabIndex = 6;
@@ -304,7 +306,7 @@
             // 
             // btnProductCheckReverse
             // 
-            this.btnProductCheckReverse.Location = new System.Drawing.Point(67, 15);
+            this.btnProductCheckReverse.Location = new System.Drawing.Point(68, 15);
             this.btnProductCheckReverse.Name = "btnProductCheckReverse";
             this.btnProductCheckReverse.Size = new System.Drawing.Size(54, 23);
             this.btnProductCheckReverse.TabIndex = 12;
@@ -316,9 +318,9 @@
             // 
             this.gbProductSel.Controls.Add(this.btnProductCheckAll);
             this.gbProductSel.Controls.Add(this.btnProductCheckReverse);
-            this.gbProductSel.Location = new System.Drawing.Point(622, 307);
+            this.gbProductSel.Location = new System.Drawing.Point(475, 350);
             this.gbProductSel.Name = "gbProductSel";
-            this.gbProductSel.Size = new System.Drawing.Size(127, 44);
+            this.gbProductSel.Size = new System.Drawing.Size(131, 44);
             this.gbProductSel.TabIndex = 13;
             this.gbProductSel.TabStop = false;
             this.gbProductSel.Text = "产品勾选";
@@ -326,17 +328,18 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(627, 365);
+            this.label3.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(629, 350);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.Size = new System.Drawing.Size(70, 14);
             this.label3.TabIndex = 14;
-            this.label3.Text = "完成:";
+            this.label3.Text = "是否完成:";
             // 
             // lbIsAllSendOK
             // 
             this.lbIsAllSendOK.AutoSize = true;
             this.lbIsAllSendOK.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbIsAllSendOK.Location = new System.Drawing.Point(668, 361);
+            this.lbIsAllSendOK.Location = new System.Drawing.Point(705, 348);
             this.lbIsAllSendOK.Name = "lbIsAllSendOK";
             this.lbIsAllSendOK.Size = new System.Drawing.Size(35, 16);
             this.lbIsAllSendOK.TabIndex = 15;
@@ -348,13 +351,35 @@
             this.toolTip.InitialDelay = 500;
             this.toolTip.ReshowDelay = 100;
             // 
+            // btnSendAllNoCredit
+            // 
+            this.btnSendAllNoCredit.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSendAllNoCredit.Location = new System.Drawing.Point(617, 395);
+            this.btnSendAllNoCredit.Name = "btnSendAllNoCredit";
+            this.btnSendAllNoCredit.Size = new System.Drawing.Size(142, 27);
+            this.btnSendAllNoCredit.TabIndex = 16;
+            this.btnSendAllNoCredit.Text = "发送邮件(不含信用)";
+            this.btnSendAllNoCredit.UseVisualStyleBackColor = true;
+            this.btnSendAllNoCredit.Click += new System.EventHandler(this.btnSendAllNoCredit_Click);
+            // 
+            // cbShowNoCreditOnly
+            // 
+            this.cbShowNoCreditOnly.AutoSize = true;
+            this.cbShowNoCreditOnly.Location = new System.Drawing.Point(621, 318);
+            this.cbShowNoCreditOnly.Name = "cbShowNoCreditOnly";
+            this.cbShowNoCreditOnly.Size = new System.Drawing.Size(132, 16);
+            this.cbShowNoCreditOnly.TabIndex = 17;
+            this.cbShowNoCreditOnly.Text = "只显示不含信用产品";
+            this.cbShowNoCreditOnly.UseVisualStyleBackColor = true;
+            this.cbShowNoCreditOnly.CheckedChanged += new System.EventHandler(this.cbShowNoCreditOnly_CheckedChanged);
+            // 
             // lvProductList
             // 
             this.lvProductList.CheckBoxes = true;
             this.lvProductList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.PNo,
             this.PName,
-            this.PIsEnable,
+            this.pIsCredit,
             this.PFileOK,
             this.PIsSend,
             this.PStatus});
@@ -377,12 +402,12 @@
             // PName
             // 
             this.PName.Text = "产品名称";
-            this.PName.Width = 127;
+            this.PName.Width = 205;
             // 
-            // PIsEnable
+            // pIsCredit
             // 
-            this.PIsEnable.Text = "是否启用";
-            this.PIsEnable.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pIsCredit.Text = "是否信用";
+            this.pIsCredit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // PFileOK
             // 
@@ -398,13 +423,15 @@
             // PStatus
             // 
             this.PStatus.Text = "状态说明";
-            this.PStatus.Width = 344;
+            this.PStatus.Width = 266;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(763, 429);
+            this.ClientSize = new System.Drawing.Size(761, 472);
+            this.Controls.Add(this.cbShowNoCreditOnly);
+            this.Controls.Add(this.btnSendAllNoCredit);
             this.Controls.Add(this.lbIsAllSendOK);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.gbProductSel);
@@ -461,7 +488,6 @@
         private System.Windows.Forms.RadioButton rbDateToday;
         private System.Windows.Forms.ToolStripMenuItem 查看VToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuViewSearch;
-        private System.Windows.Forms.ColumnHeader PIsEnable;
         private System.Windows.Forms.ToolStripMenuItem menuViewSendLog;
         private System.Windows.Forms.ComboBox cbSendMode;
         private System.Windows.Forms.Label label2;
@@ -472,6 +498,9 @@
         private System.Windows.Forms.Label lbIsAllSendOK;
         private System.Windows.Forms.ToolTip toolTip;
         public DoubleBufferListView lvProductList;
+        private System.Windows.Forms.ColumnHeader pIsCredit;
+        private System.Windows.Forms.Button btnSendAllNoCredit;
+        private System.Windows.Forms.CheckBox cbShowNoCreditOnly;
     }
 }
 

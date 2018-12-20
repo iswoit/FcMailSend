@@ -125,9 +125,15 @@ namespace FcMailSend
             int idx = 0;    // 计数器
             foreach (Product product in Manager.ProductList)
             {
+                if(cbShowNoCreditOnly.Checked)
+                {
+                    if (product.IsCredit)
+                        continue;
+                }
+
                 ListViewItem lvi = new ListViewItem((++idx).ToString());
                 lvi.SubItems.Add(product.ProductName);
-                lvi.SubItems.Add(product.Disable == false ? "√" : "×");
+                lvi.SubItems.Add(product.IsCredit ? "√" : "×");
                 lvi.SubItems.Add("×");
                 lvi.SubItems.Add(product.IsSendOK ? "√" : "×");
                 lvi.SubItems.Add(string.Empty);
@@ -224,6 +230,82 @@ namespace FcMailSend
 
         }
 
+
+        private void btnSendAllNoCredit_Click(object sender, EventArgs e)
+        {
+            if (!bwSendMail.IsBusy)
+            {
+                // 获取参数对象
+                MailSendMode sendMode = ((ComboBoxSendModeItem)cbSendMode.SelectedItem).Value;
+                DateTime date;
+                if (rbDateToday.Checked)
+                    date = DateTime.Now.Date;
+                else
+                    date = dtpDate.Value.Date;
+
+                ProductList productListTmp = new ProductList();
+                switch (sendMode)
+                {
+                    case MailSendMode.重发所有产品:
+                        foreach (Product product in Manager.ProductList)
+                        {
+                            if (product.IsCredit == false)
+                            {
+                                product.Note = string.Empty;
+                                productListTmp.Add(product);
+                            }
+                        }
+                        break;
+                    case MailSendMode.只发送勾选的产品:
+                        foreach (ListViewItem lvi in lvProductList.Items)
+                        {
+                            if (lvi.Checked == true)
+                            {
+                                if (((Product)lvi.Tag).IsCredit == false)
+                                {
+                                    productListTmp.Add((Product)lvi.Tag);
+                                }
+                            }
+                        }
+                        break;
+                    case MailSendMode.发送未发送的产品:
+                    default:
+                        foreach (Product product in Manager.ProductList)
+                        {
+                            if (product.IsCredit == false)
+                            {
+                                if (product.IsSendOK == false)
+                                {
+                                    productListTmp.Add(product);
+                                }
+                            }
+
+                            product.Note = string.Empty;
+                        }
+                        break;
+                }
+
+
+                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, true);
+
+                lbIsAllSendOK.Text = "N/A";
+                lbIsAllSendOK.ForeColor = Color.Black;
+                btnSendAllNoCredit.Text = "点击取消...";
+
+                // 禁用菜单
+                menuStrip.Enabled = false;
+                btnSendAll.Enabled = false;
+
+                bwSendMail.RunWorkerAsync(arg);
+            }
+            else
+            {
+                btnSendAllNoCredit.Text = "发送邮件(不含信用)";
+                bwSendMail.CancelAsync();
+            }
+        }
+
+
         private void btnSendAll_Click(object sender, EventArgs e)
         {
             if (!bwSendMail.IsBusy)
@@ -270,7 +352,7 @@ namespace FcMailSend
                 }
 
 
-                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp);
+                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, false);
 
                 lbIsAllSendOK.Text = "N/A";
                 lbIsAllSendOK.ForeColor = Color.Black;
@@ -278,6 +360,7 @@ namespace FcMailSend
 
                 // 禁用菜单
                 menuStrip.Enabled = false;
+                btnSendAllNoCredit.Enabled = false;
 
                 bwSendMail.RunWorkerAsync(arg);
             }
@@ -304,6 +387,7 @@ namespace FcMailSend
             try
             {
                 Manager.SendMail(productListTmp, arg.Date, sender as BackgroundWorker, e);
+                e.Result = arg.IsCredit;    // 是否信用(简略)
             }
             catch (Exception ex)
             {
@@ -313,7 +397,6 @@ namespace FcMailSend
 
         private void bwSendMail_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
             // 更新listView
             try
             {
@@ -327,6 +410,7 @@ namespace FcMailSend
 
         private void bwSendMail_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+           
             if (e.Error != null)    // 未处理的异常，需要弹框
             {
                 Print_Message(e.Error.Message);
@@ -337,22 +421,45 @@ namespace FcMailSend
             }
             else
             {
-                Print_Message(string.Format(@"邮件发送完成. 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCount, Manager.ProductList.Count, Manager.ProductList.IsAllSendOK ? "√" : "×"));
+                if((bool)e.Result==true)
+                {
+                    Print_Message(string.Format(@"邮件发送完成(不含信用). 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCountNoCredit, Manager.ProductList.TotalCountNoCredit, Manager.ProductList.IsAllSendOKNoCredit ? "√" : "×"));
+
+                    if (Manager.ProductList.IsAllSendOKNoCredit == true)
+                    {
+                        lbIsAllSendOK.Text = "是";
+                        lbIsAllSendOK.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        lbIsAllSendOK.Text = "否";
+                        lbIsAllSendOK.ForeColor = Color.Red;
+                    }
+                }
+                else
+                {
+                    Print_Message(string.Format(@"邮件发送完成. 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCount, Manager.ProductList.Count, Manager.ProductList.IsAllSendOK ? "√" : "×"));
+
+                    if (Manager.ProductList.IsAllSendOK == true)
+                    {
+                        lbIsAllSendOK.Text = "是";
+                        lbIsAllSendOK.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        lbIsAllSendOK.Text = "否";
+                        lbIsAllSendOK.ForeColor = Color.Red;
+                    }
+                }
             }
 
-            if (Manager.ProductList.IsAllSendOK == true)
-            {
-                lbIsAllSendOK.Text = "是";
-                lbIsAllSendOK.ForeColor = Color.Green;
-            }
-            else
-            {
-                lbIsAllSendOK.Text = "否";
-                lbIsAllSendOK.ForeColor = Color.Red;
-            }
 
+            btnSendAllNoCredit.Text = "发送邮件(不含信用)";
             btnSendAll.Text = "发送邮件";
+
             menuStrip.Enabled = true;
+            btnSendAll.Enabled = true;
+            btnSendAllNoCredit.Enabled = true;
         }
 
 
@@ -622,6 +729,11 @@ namespace FcMailSend
                 if (dlg.ShowDialog() == DialogResult.OK)
                 { }
             }
+        }
+
+        private void cbShowNoCreditOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplayProductList();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace FcMailSend
         private MailSendMode _sendMode;
         private DateTime _date;
         private ProductList _productList;
+        private bool _isCredit;
 
         public MailSendMode SendMode
         {
@@ -32,12 +33,17 @@ namespace FcMailSend
             get { return _productList; }
         }
 
+        public bool IsCredit
+        {
+            get { return _isCredit; }
+        }
 
-        public MailSendArgument(MailSendMode mode,DateTime date,ProductList productList)
+        public MailSendArgument(MailSendMode mode, DateTime date, ProductList productList, bool isCredit)
         {
             _sendMode = mode;
             _date = date;
             _productList = productList;
+            _isCredit = isCredit;
         }
     }
 }

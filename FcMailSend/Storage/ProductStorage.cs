@@ -39,6 +39,7 @@ namespace FcMailSend
                                 string mailTitle = dr["MailTitle"].ToString();
                                 string mailContent = dr["MailContent"].ToString();
                                 bool disable = bool.Parse(dr["Disable"].ToString());
+                                bool isCredit = bool.Parse(dr["IsCredit"].ToString());  // 2018-12-20是否信用
 
                                 // 获取附件列表
                                 ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
@@ -47,13 +48,14 @@ namespace FcMailSend
                                 ProductReceiverList receiverList = ReadProductReceiver(id, cn);
 
                                 Product product = new Product(
-                                    id,
-                                    productName,
-                                    mailTitle,
-                                    mailContent,
-                                    disable,
-                                    attList,
-                                    receiverList);
+                                    id: id,
+                                    productName: productName,
+                                    mailTitle: mailTitle,
+                                    mailContent: mailContent,
+                                    disable: disable,
+                                    attachmentList: attList,
+                                    receiverList: receiverList,
+                                    isCredit: isCredit);
 
                                 productList.Add(product);
                             }//eof while
@@ -100,6 +102,7 @@ namespace FcMailSend
                                 string mailTitle = dr["MailTitle"].ToString();
                                 string mailContent = dr["MailContent"].ToString();
                                 bool disable = bool.Parse(dr["Disable"].ToString());
+                                bool isCredit = bool.Parse(dr["IsCredit"].ToString());
 
                                 // 获取附件列表
                                 ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
@@ -108,13 +111,14 @@ namespace FcMailSend
                                 ProductReceiverList receiverList = ReadProductReceiver(id, cn);
 
                                 product = new Product(
-                                    id,
-                                    productName,
-                                    mailTitle,
-                                    mailContent,
-                                    disable,
-                                    attList,
-                                    receiverList);
+                                   id: id,
+                                    productName: productName,
+                                    mailTitle: mailTitle,
+                                    mailContent: mailContent,
+                                    disable: disable,
+                                    attachmentList: attList,
+                                    receiverList: receiverList,
+                                    isCredit: isCredit);
                             }
                             else
                             {
@@ -160,12 +164,13 @@ namespace FcMailSend
                             {
                                 // 插入product表
                                 cmd.Parameters.Clear();
-                                cmd.CommandText = "insert into Product(ID, ProductName, MailTitle, MailContent, Disable) values (@ID, @ProductName, @MailTitle, @MailContent,@Disable)";
+                                cmd.CommandText = "insert into Product(ID, ProductName, MailTitle, MailContent, Disable, IsCredit) values (@ID, @ProductName, @MailTitle, @MailContent, @Disable, @IsCredit)";
                                 cmd.Parameters.Add(new SQLiteParameter("@ID", newID));
                                 cmd.Parameters.Add(new SQLiteParameter("@ProductName", product.ProductName));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailTitle", product.MailTitle));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailContent", product.MailContent));
                                 cmd.Parameters.Add(new SQLiteParameter("@Disable", product.Disable));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsCredit", product.IsCredit));
                                 cmd.ExecuteNonQuery();
 
                                 // 插入attachment表
@@ -227,12 +232,13 @@ namespace FcMailSend
                             {
                                 // 1.更新product表
                                 cmd.Parameters.Clear();
-                                cmd.CommandText = "update Product set ProductName=@ProductName, MailTitle=@MailTitle, MailContent=@MailContent,Disable=@Disable where ID=@ID";
+                                cmd.CommandText = "update Product set ProductName=@ProductName, MailTitle=@MailTitle, MailContent=@MailContent,Disable=@Disable,IsCredit=@IsCredit where ID=@ID";
                                 cmd.Parameters.Add(new SQLiteParameter("@ID", product.Id));
                                 cmd.Parameters.Add(new SQLiteParameter("@ProductName", product.ProductName));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailTitle", product.MailTitle));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailContent", product.MailContent));
                                 cmd.Parameters.Add(new SQLiteParameter("@Disable", product.Disable));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsCredit", product.IsCredit));
                                 cmd.ExecuteNonQuery();
 
 

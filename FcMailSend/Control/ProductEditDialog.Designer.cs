@@ -55,21 +55,25 @@
             this.menuReceiverAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReceiverEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReceiverDel = new System.Windows.Forms.ToolStripMenuItem();
+            this.rbCreditYes = new System.Windows.Forms.RadioButton();
+            this.rbCreditNo = new System.Windows.Forms.RadioButton();
+            this.gbIsCredit = new System.Windows.Forms.GroupBox();
             this.ctxAttachment.SuspendLayout();
             this.ctxReceiver.SuspendLayout();
+            this.gbIsCredit.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(621, 309);
+            this.btnReset.Location = new System.Drawing.Point(620, 433);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(702, 309);
+            this.btnCancel.Location = new System.Drawing.Point(701, 433);
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(540, 309);
+            this.btnOK.Location = new System.Drawing.Point(539, 433);
             // 
             // label1
             // 
@@ -83,7 +87,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(271, 13);
+            this.label2.Location = new System.Drawing.Point(645, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 12);
             this.label2.TabIndex = 4;
@@ -92,7 +96,7 @@
             // cbDisable
             // 
             this.cbDisable.AutoSize = true;
-            this.cbDisable.Location = new System.Drawing.Point(336, 12);
+            this.cbDisable.Location = new System.Drawing.Point(710, 17);
             this.cbDisable.Name = "cbDisable";
             this.cbDisable.Size = new System.Drawing.Size(48, 16);
             this.cbDisable.TabIndex = 5;
@@ -112,7 +116,7 @@
             // 
             this.txtMailTitle.Location = new System.Drawing.Point(77, 44);
             this.txtMailTitle.Name = "txtMailTitle";
-            this.txtMailTitle.Size = new System.Drawing.Size(307, 21);
+            this.txtMailTitle.Size = new System.Drawing.Size(364, 21);
             this.txtMailTitle.TabIndex = 7;
             // 
             // txtProductName
@@ -125,7 +129,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 174);
+            this.label4.Location = new System.Drawing.Point(12, 275);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 12);
             this.label4.TabIndex = 9;
@@ -134,17 +138,17 @@
             // txtMailContent
             // 
             this.txtMailContent.AcceptsReturn = true;
-            this.txtMailContent.Location = new System.Drawing.Point(77, 174);
+            this.txtMailContent.Location = new System.Drawing.Point(76, 272);
             this.txtMailContent.Multiline = true;
             this.txtMailContent.Name = "txtMailContent";
             this.txtMailContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMailContent.Size = new System.Drawing.Size(700, 127);
+            this.txtMailContent.Size = new System.Drawing.Size(700, 136);
             this.txtMailContent.TabIndex = 10;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(36, 76);
+            this.label5.Location = new System.Drawing.Point(36, 189);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 12);
             this.label5.TabIndex = 11;
@@ -153,7 +157,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(399, 47);
+            this.label6.Location = new System.Drawing.Point(24, 81);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(47, 12);
             this.label6.TabIndex = 12;
@@ -168,10 +172,10 @@
             this.lvAttachment.ContextMenuStrip = this.ctxAttachment;
             this.lvAttachment.FullRowSelect = true;
             this.lvAttachment.GridLines = true;
-            this.lvAttachment.Location = new System.Drawing.Point(77, 76);
+            this.lvAttachment.Location = new System.Drawing.Point(77, 189);
             this.lvAttachment.MultiSelect = false;
             this.lvAttachment.Name = "lvAttachment";
-            this.lvAttachment.Size = new System.Drawing.Size(307, 92);
+            this.lvAttachment.Size = new System.Drawing.Size(699, 77);
             this.lvAttachment.TabIndex = 13;
             this.lvAttachment.UseCompatibleStateImageBehavior = false;
             this.lvAttachment.View = System.Windows.Forms.View.Details;
@@ -188,7 +192,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "路径";
-            this.columnHeader2.Width = 175;
+            this.columnHeader2.Width = 573;
             // 
             // ctxAttachment
             // 
@@ -197,27 +201,27 @@
             this.menuAttachmentEdit,
             this.menuAttachmentDel});
             this.ctxAttachment.Name = "ctxAttachment";
-            this.ctxAttachment.Size = new System.Drawing.Size(134, 70);
+            this.ctxAttachment.Size = new System.Drawing.Size(137, 70);
             this.ctxAttachment.Opening += new System.ComponentModel.CancelEventHandler(this.ctxAttachment_Opening);
             // 
             // menuAttachmentAdd
             // 
             this.menuAttachmentAdd.Name = "menuAttachmentAdd";
-            this.menuAttachmentAdd.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentAdd.Size = new System.Drawing.Size(136, 22);
             this.menuAttachmentAdd.Text = "增加附件...";
             this.menuAttachmentAdd.Click += new System.EventHandler(this.menuAttachmentAdd_Click);
             // 
             // menuAttachmentEdit
             // 
             this.menuAttachmentEdit.Name = "menuAttachmentEdit";
-            this.menuAttachmentEdit.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentEdit.Size = new System.Drawing.Size(136, 22);
             this.menuAttachmentEdit.Text = "修改附件...";
             this.menuAttachmentEdit.Click += new System.EventHandler(this.menuAttachmentEdit_Click);
             // 
             // menuAttachmentDel
             // 
             this.menuAttachmentDel.Name = "menuAttachmentDel";
-            this.menuAttachmentDel.Size = new System.Drawing.Size(133, 22);
+            this.menuAttachmentDel.Size = new System.Drawing.Size(136, 22);
             this.menuAttachmentDel.Text = "删除附件";
             this.menuAttachmentDel.Click += new System.EventHandler(this.menuAttachmentDel_Click);
             // 
@@ -230,10 +234,10 @@
             this.lvReceiver.ContextMenuStrip = this.ctxReceiver;
             this.lvReceiver.FullRowSelect = true;
             this.lvReceiver.GridLines = true;
-            this.lvReceiver.Location = new System.Drawing.Point(452, 44);
+            this.lvReceiver.Location = new System.Drawing.Point(77, 81);
             this.lvReceiver.MultiSelect = false;
             this.lvReceiver.Name = "lvReceiver";
-            this.lvReceiver.Size = new System.Drawing.Size(325, 124);
+            this.lvReceiver.Size = new System.Drawing.Size(699, 92);
             this.lvReceiver.TabIndex = 14;
             this.lvReceiver.UseCompatibleStateImageBehavior = false;
             this.lvReceiver.View = System.Windows.Forms.View.Details;
@@ -246,7 +250,7 @@
             // chReceiverEmailAddress
             // 
             this.chReceiverEmailAddress.Text = "收件人地址";
-            this.chReceiverEmailAddress.Width = 188;
+            this.chReceiverEmailAddress.Width = 559;
             // 
             // chReceiverType
             // 
@@ -260,35 +264,69 @@
             this.menuReceiverEdit,
             this.menuReceiverDel});
             this.ctxReceiver.Name = "ctxReceiver";
-            this.ctxReceiver.Size = new System.Drawing.Size(146, 70);
+            this.ctxReceiver.Size = new System.Drawing.Size(149, 70);
             this.ctxReceiver.Opening += new System.ComponentModel.CancelEventHandler(this.ctxReceiver_Opening);
             // 
             // menuReceiverAdd
             // 
             this.menuReceiverAdd.Name = "menuReceiverAdd";
-            this.menuReceiverAdd.Size = new System.Drawing.Size(145, 22);
+            this.menuReceiverAdd.Size = new System.Drawing.Size(148, 22);
             this.menuReceiverAdd.Text = "新增收件人...";
             this.menuReceiverAdd.Click += new System.EventHandler(this.menuReceiverAdd_Click);
             // 
             // menuReceiverEdit
             // 
             this.menuReceiverEdit.Name = "menuReceiverEdit";
-            this.menuReceiverEdit.Size = new System.Drawing.Size(145, 22);
+            this.menuReceiverEdit.Size = new System.Drawing.Size(148, 22);
             this.menuReceiverEdit.Text = "编辑收件人...";
             this.menuReceiverEdit.Click += new System.EventHandler(this.menuReceiverEdit_Click);
             // 
             // menuReceiverDel
             // 
             this.menuReceiverDel.Name = "menuReceiverDel";
-            this.menuReceiverDel.Size = new System.Drawing.Size(145, 22);
+            this.menuReceiverDel.Size = new System.Drawing.Size(148, 22);
             this.menuReceiverDel.Text = "删除收件人...";
             this.menuReceiverDel.Click += new System.EventHandler(this.menuReceiverDel_Click);
+            // 
+            // rbCreditYes
+            // 
+            this.rbCreditYes.AutoSize = true;
+            this.rbCreditYes.Location = new System.Drawing.Point(69, 20);
+            this.rbCreditYes.Name = "rbCreditYes";
+            this.rbCreditYes.Size = new System.Drawing.Size(35, 16);
+            this.rbCreditYes.TabIndex = 16;
+            this.rbCreditYes.Text = "是";
+            this.rbCreditYes.UseVisualStyleBackColor = true;
+            // 
+            // rbCreditNo
+            // 
+            this.rbCreditNo.AutoSize = true;
+            this.rbCreditNo.Checked = true;
+            this.rbCreditNo.Location = new System.Drawing.Point(18, 20);
+            this.rbCreditNo.Name = "rbCreditNo";
+            this.rbCreditNo.Size = new System.Drawing.Size(35, 16);
+            this.rbCreditNo.TabIndex = 17;
+            this.rbCreditNo.TabStop = true;
+            this.rbCreditNo.Text = "否";
+            this.rbCreditNo.UseVisualStyleBackColor = true;
+            // 
+            // gbIsCredit
+            // 
+            this.gbIsCredit.Controls.Add(this.rbCreditYes);
+            this.gbIsCredit.Controls.Add(this.rbCreditNo);
+            this.gbIsCredit.Location = new System.Drawing.Point(510, 9);
+            this.gbIsCredit.Name = "gbIsCredit";
+            this.gbIsCredit.Size = new System.Drawing.Size(115, 50);
+            this.gbIsCredit.TabIndex = 18;
+            this.gbIsCredit.TabStop = false;
+            this.gbIsCredit.Text = "是否信用批次";
             // 
             // ProductEditDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(788, 344);
+            this.ClientSize = new System.Drawing.Size(788, 468);
+            this.Controls.Add(this.gbIsCredit);
             this.Controls.Add(this.lvReceiver);
             this.Controls.Add(this.lvAttachment);
             this.Controls.Add(this.label6);
@@ -318,8 +356,11 @@
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.lvAttachment, 0);
             this.Controls.SetChildIndex(this.lvReceiver, 0);
+            this.Controls.SetChildIndex(this.gbIsCredit, 0);
             this.ctxAttachment.ResumeLayout(false);
             this.ctxReceiver.ResumeLayout(false);
+            this.gbIsCredit.ResumeLayout(false);
+            this.gbIsCredit.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,5 +394,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuAttachmentAdd;
         private System.Windows.Forms.ToolStripMenuItem menuAttachmentEdit;
         private System.Windows.Forms.ToolStripMenuItem menuAttachmentDel;
+        private System.Windows.Forms.RadioButton rbCreditYes;
+        private System.Windows.Forms.RadioButton rbCreditNo;
+        private System.Windows.Forms.GroupBox gbIsCredit;
     }
 }

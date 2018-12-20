@@ -45,13 +45,14 @@ namespace FcMailSend
             Product product;
             if (ProductID <= 0)
                 product = new Product(
-                    0,
-                    string.Empty,
-                    string.Empty,
-                    string.Empty,
-                    false,
-                    new ProductAttachmentList(),
-                    new ProductReceiverList());
+                    id: 0,
+                    productName: string.Empty,
+                    mailTitle: string.Empty,
+                    mailContent: string.Empty,
+                    disable: false,
+                    attachmentList: new ProductAttachmentList(),
+                    receiverList: new ProductReceiverList(),
+                    isCredit: false);
             else
                 product = ProductStorage.ReadProduct(ProductID);
             _product = product;
@@ -61,6 +62,10 @@ namespace FcMailSend
             txtMailTitle.Text = Product.MailTitle;
             txtMailContent.Text = Product.MailContent.Replace("\n", System.Environment.NewLine);
             cbDisable.Checked = Product.Disable;
+            if (Product.IsCredit)
+                rbCreditYes.Checked = true;
+            else
+                rbCreditNo.Checked = true;
 
             // 附件
             ResetAttachmentList();
@@ -309,7 +314,7 @@ namespace FcMailSend
                     txtMailTitle.Focus();
                     e.Cancel = true;
                 }
-                else if(Product.ProductAttachmentList.Count<0)
+                else if (Product.ProductAttachmentList.Count < 0)
                 {
                     DialogResult result = MessageBox.Show("[附件]至少要有一个", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     e.Cancel = true;
@@ -322,7 +327,7 @@ namespace FcMailSend
                 else
                 {
                     int iCount = 0;
-                    foreach(ProductReceiver receiver in Product.ProductReceiverList)
+                    foreach (ProductReceiver receiver in Product.ProductReceiverList)
                     {
                         if (receiver.ReceiverType == ReceiverType.收件人)
                             iCount++;
@@ -346,6 +351,7 @@ namespace FcMailSend
             Product.MailTitle = txtMailTitle.Text;
             Product.Disable = cbDisable.Checked;
             Product.MailContent = txtMailContent.Text.Replace(System.Environment.NewLine, "\n");
+            Product.IsCredit = rbCreditYes.Checked ? true : false;
 
             DialogResult dr = MessageBox.Show("确定提交修改?", "确定", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
