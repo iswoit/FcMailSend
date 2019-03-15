@@ -19,6 +19,7 @@ namespace FcMailSend
         private string _displayName;        // 显示的名称
         private MailPriority _priority;     // 优先级
         private string _tailContent;        // 尾部信息
+        private int _sendInterval;          // 两封邮件的发送间隔，单位秒(20190315:发送太频繁QQ邮箱拦截)
 
 
         #region 属性
@@ -67,12 +68,17 @@ namespace FcMailSend
             get { return _tailContent; }
         }
 
+        public int SendInterval
+        {
+            get { return _sendInterval; }
+        }
+
         #endregion
 
 
 
 
-        public MailSender(string host, int port, bool enableSSL, string address, string password, int timeout, string displayName, MailPriority priority,  string tailContent = "")
+        public MailSender(string host, int port, bool enableSSL, string address, string password, int timeout, string displayName, MailPriority priority, string tailContent, int sendInterval)
         {
             _host = host;
             _port = port;
@@ -83,10 +89,11 @@ namespace FcMailSend
             _priority = priority;
             _timeout = timeout;
             _tailContent = tailContent;
+            _sendInterval = sendInterval;
         }
 
 
-        public void UpdateMailSender(string host, int port, bool enableSSL, string address, string password, int timeout, string displayName, MailPriority priority, string tailContent = "")
+        public void UpdateMailSender(string host, int port, bool enableSSL, string address, string password, int timeout, string displayName, MailPriority priority, string tailContent, int sendInterval)
         {
             _host = host;
             _port = port;
@@ -97,6 +104,7 @@ namespace FcMailSend
             _priority = priority;
             _timeout = timeout;
             _tailContent = tailContent;
+            _sendInterval = sendInterval;
         }
     }
 }

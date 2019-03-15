@@ -354,7 +354,7 @@
             // btnSendAllNoCredit
             // 
             this.btnSendAllNoCredit.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSendAllNoCredit.ForeColor = System.Drawing.Color.Gray;
+            this.btnSendAllNoCredit.ForeColor = System.Drawing.Color.Red;
             this.btnSendAllNoCredit.Location = new System.Drawing.Point(617, 386);
             this.btnSendAllNoCredit.Name = "btnSendAllNoCredit";
             this.btnSendAllNoCredit.Size = new System.Drawing.Size(142, 27);

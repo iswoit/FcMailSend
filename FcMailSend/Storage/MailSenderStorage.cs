@@ -45,9 +45,10 @@ namespace FcMailSend
                                 MailPriority priority = (MailPriority)(int.Parse(dr["Priority"].ToString()));
 
                                 string tailContent = dr["TailContent"].ToString();
+                                int sendInterval = int.Parse(dr["SendInterval"].ToString());
 
 
-                                mailSender = new MailSender(host, port, enableSSL, address, password, timeout, displayName, priority, tailContent);
+                                mailSender = new MailSender(host, port, enableSSL, address, password, timeout, displayName, priority, tailContent, sendInterval);
                             }
 
                         }//eof dr
@@ -79,7 +80,7 @@ namespace FcMailSend
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
 
-                        cmd.CommandText = string.Format(@"update MailSender set Host=@Host, Port=@Port, EnableSSL=@EnableSSL, Address=@Address, Password=@Password, Timeout=@Timeout, DisplayName=@DisplayName, Priority=@Priority, TailContent=@TailContent;");
+                        cmd.CommandText = string.Format(@"update MailSender set Host=@Host, Port=@Port, EnableSSL=@EnableSSL, Address=@Address, Password=@Password, Timeout=@Timeout, DisplayName=@DisplayName, Priority=@Priority, TailContent=@TailContent, SendInterval=@SendInterval;");
                         cmd.Parameters.Add(new SQLiteParameter("@Host", mailSender.Host));
                         cmd.Parameters.Add(new SQLiteParameter("@Port", mailSender.Port));
                         cmd.Parameters.Add(new SQLiteParameter("@EnableSSL", mailSender.EnableSSL));
@@ -89,7 +90,7 @@ namespace FcMailSend
                         cmd.Parameters.Add(new SQLiteParameter("@DisplayName", mailSender.DisplayName));
                         cmd.Parameters.Add(new SQLiteParameter("@Priority", mailSender.Priority));
                         cmd.Parameters.Add(new SQLiteParameter("@TailContent", mailSender.TailContent));
-
+                        cmd.Parameters.Add(new SQLiteParameter("@SendInterval", mailSender.SendInterval));
 
                         cmd.ExecuteNonQuery();
 
@@ -103,6 +104,6 @@ namespace FcMailSend
         }
 
 
-        
+
     }
 }

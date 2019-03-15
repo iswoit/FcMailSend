@@ -125,7 +125,7 @@ namespace FcMailSend
             int idx = 0;    // 计数器
             foreach (Product product in Manager.ProductList)
             {
-                if(cbShowNoCreditOnly.Checked)
+                if (cbShowNoCreditOnly.Checked)
                 {
                     if (product.IsCredit)
                         continue;
@@ -286,7 +286,7 @@ namespace FcMailSend
                 }
 
 
-                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, true);
+                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, true, Manager.MailSender.SendInterval);
 
                 lbIsAllSendOK.Text = "N/A";
                 lbIsAllSendOK.ForeColor = Color.Black;
@@ -352,7 +352,7 @@ namespace FcMailSend
                 }
 
 
-                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, false);
+                MailSendArgument arg = new MailSendArgument(sendMode, date, productListTmp, false, Manager.MailSender.SendInterval);
 
                 lbIsAllSendOK.Text = "N/A";
                 lbIsAllSendOK.ForeColor = Color.Black;
@@ -386,7 +386,7 @@ namespace FcMailSend
 
             try
             {
-                Manager.SendMail(productListTmp, arg.Date, sender as BackgroundWorker, e);
+                Manager.SendMail(productListTmp, arg.Date, sender as BackgroundWorker, e, arg.SendInterval);
                 e.Result = arg.IsCredit;    // 是否信用(简略)
             }
             catch (Exception ex)
@@ -410,7 +410,7 @@ namespace FcMailSend
 
         private void bwSendMail_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-           
+
             if (e.Error != null)    // 未处理的异常，需要弹框
             {
                 Print_Message(e.Error.Message);
@@ -421,7 +421,7 @@ namespace FcMailSend
             }
             else
             {
-                if((bool)e.Result==true)
+                if ((bool)e.Result == true)
                 {
                     Print_Message(string.Format(@"邮件发送完成(不含信用). 进度{0}/{1}. 是否完成: {2}", Manager.ProductList.FinishedCountNoCredit, Manager.ProductList.TotalCountNoCredit, Manager.ProductList.IsAllSendOKNoCredit ? "√" : "×"));
 

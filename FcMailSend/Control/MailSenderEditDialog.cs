@@ -58,7 +58,7 @@ namespace FcMailSend
 
             // priority
             txtTailContent.Text = mailSender.TailContent.Replace("\n", System.Environment.NewLine);
-
+            txtSendInterval.Text = mailSender.SendInterval.ToString();
 
             //base.ResetDialog();
         }
@@ -66,6 +66,7 @@ namespace FcMailSend
 
         private bool ValidatePort()
         {
+            // 验证端口
             int iTmp;
             if (!int.TryParse(txtPort.Text.Trim(), out iTmp))
                 return false;
@@ -75,6 +76,20 @@ namespace FcMailSend
             else
                 return false;
         }
+
+        private bool ValidateSendInterval()
+        {
+            // 验证发送间隔
+            int iTmp;
+            if (!int.TryParse(txtSendInterval.Text.Trim(), out iTmp))
+                return false;
+
+            if (iTmp >= 0 && iTmp <= 30)
+                return true;
+            else
+                return false;
+        }
+
 
 
         protected override void OnClosing(CancelEventArgs e)
@@ -88,11 +103,18 @@ namespace FcMailSend
                     e.Cancel = true;
                 }
 
+                if (!ValidateSendInterval())
+                {
+                    DialogResult result = MessageBox.Show("[发送间隔]必须是0-30之间的数字", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtSendInterval.Focus();
+                    e.Cancel = true;
+                }
+
 
                 if (!e.Cancel)
                     SaveSettings(e);
             }
-           
+
         }
 
 
@@ -117,9 +139,10 @@ namespace FcMailSend
                 else if (rdPrioHigh.Checked)
                     priority = MailPriority.High;
                 string tailContent = txtTailContent.Text.Replace(System.Environment.NewLine, "\n");
+                int sendInterval = int.Parse(txtSendInterval.Text.Trim());
 
                 // 重新生成内存对象
-                Manager.MailSender = new MailSender(host, port, enableSSL, address, password, timeout, displayName, priority, tailContent);
+                Manager.MailSender = new MailSender(host, port, enableSSL, address, password, timeout, displayName, priority, tailContent, sendInterval);
 
                 // 写数据库
                 MailSenderStorage.WriteMailSender(Manager.MailSender);

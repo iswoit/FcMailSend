@@ -74,7 +74,7 @@ namespace FcMailSend
 
 
         // 发送整个list的邮件
-        public void SendMail(ProductList productList, DateTime date, BackgroundWorker bgWorker, DoWorkEventArgs e)
+        public void SendMail(ProductList productList, DateTime date, BackgroundWorker bgWorker, DoWorkEventArgs e, int sendInterval)
         {
             // 循环每一个产品
             foreach (Product product in productList)
@@ -85,11 +85,24 @@ namespace FcMailSend
                     return;
                 }
 
+                
 
                 // 0.打标记
                 product.IsRunning = true;
                 bgWorker.ReportProgress(1);
                 Thread.Sleep(40);
+
+
+                // 发送产品前等待时间20190315增加，防止QQ邮箱550错误
+                int timeToWait = sendInterval;
+                while (timeToWait > 0)
+                {
+                    product.Note = string.Format(@"发送前等待{0}秒...", timeToWait);
+                    bgWorker.ReportProgress(1);
+                    Thread.Sleep(1000);
+                    timeToWait--;
+                }
+
 
                 if (product.Disable == true)
                 {

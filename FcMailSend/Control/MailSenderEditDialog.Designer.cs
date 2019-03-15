@@ -50,6 +50,8 @@
             this.rdPrioHigh = new System.Windows.Forms.RadioButton();
             this.rdPrioLow = new System.Windows.Forms.RadioButton();
             this.rdPrioNormal = new System.Windows.Forms.RadioButton();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtSendInterval = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTimeout)).BeginInit();
             this.panel1.SuspendLayout();
@@ -57,15 +59,15 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(260, 382);
+            this.btnReset.Location = new System.Drawing.Point(260, 405);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(341, 382);
+            this.btnCancel.Location = new System.Drawing.Point(341, 405);
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(179, 382);
+            this.btnOK.Location = new System.Drawing.Point(179, 405);
             // 
             // label1
             // 
@@ -101,9 +103,11 @@
             this.tableLayoutPanel1.Controls.Add(this.txtDisplayName, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.numTimeout, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.txtSendInterval, 1, 9);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 9;
+            this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -113,7 +117,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(404, 350);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(404, 377);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // label9
@@ -122,7 +127,7 @@
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Location = new System.Drawing.Point(3, 200);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(86, 150);
+            this.label9.Size = new System.Drawing.Size(86, 152);
             this.label9.TabIndex = 12;
             this.label9.Text = "邮件末尾附文:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -244,7 +249,7 @@
             this.txtTailContent.Multiline = true;
             this.txtTailContent.Name = "txtTailContent";
             this.txtTailContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTailContent.Size = new System.Drawing.Size(306, 144);
+            this.txtTailContent.Size = new System.Drawing.Size(306, 146);
             this.txtTailContent.TabIndex = 13;
             // 
             // txtAddress
@@ -326,11 +331,31 @@
             this.rdPrioNormal.Text = "普通";
             this.rdPrioNormal.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label10.Location = new System.Drawing.Point(3, 352);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(86, 25);
+            this.label10.TabIndex = 20;
+            this.label10.Text = "发送间隔(秒):";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtSendInterval
+            // 
+            this.txtSendInterval.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtSendInterval.Location = new System.Drawing.Point(95, 355);
+            this.txtSendInterval.Name = "txtSendInterval";
+            this.txtSendInterval.Size = new System.Drawing.Size(78, 21);
+            this.txtSendInterval.TabIndex = 21;
+            // 
             // MailSenderEditDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 417);
+            this.ClientSize = new System.Drawing.Size(427, 439);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MailSenderEditDialog";
             this.Text = "发件人信息";
@@ -371,5 +396,7 @@
         private System.Windows.Forms.RadioButton rdPrioNormal;
         private System.Windows.Forms.RadioButton rdPrioHigh;
         private System.Windows.Forms.RadioButton rdPrioLow;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtSendInterval;
     }
 }
