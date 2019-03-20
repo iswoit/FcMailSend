@@ -407,7 +407,7 @@
             // 
             // pIsCredit
             // 
-            this.pIsCredit.Text = "是否信用";
+            this.pIsCredit.Text = "信用标识";
             this.pIsCredit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // PFileOK

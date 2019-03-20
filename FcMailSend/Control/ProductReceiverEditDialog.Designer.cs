@@ -159,6 +159,7 @@
             this.Controls.Add(this.tableLayoutPanel2);
             this.Name = "ProductReceiverEditDialog";
             this.Text = "ProductMailReceiverEditDialog";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ProductReceiverEditDialog_Paint);
             this.Controls.SetChildIndex(this.btnOK, 0);
             this.Controls.SetChildIndex(this.btnReset, 0);
             this.Controls.SetChildIndex(this.btnCancel, 0);

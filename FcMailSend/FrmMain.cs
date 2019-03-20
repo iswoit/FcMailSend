@@ -133,7 +133,7 @@ namespace FcMailSend
 
                 ListViewItem lvi = new ListViewItem((++idx).ToString());
                 lvi.SubItems.Add(product.ProductName);
-                lvi.SubItems.Add(product.IsCredit ? "√" : "×");
+                lvi.SubItems.Add(product.IsCredit ? "√" : string.Empty);
                 lvi.SubItems.Add("×");
                 lvi.SubItems.Add(product.IsSendOK ? "√" : "×");
                 lvi.SubItems.Add(string.Empty);

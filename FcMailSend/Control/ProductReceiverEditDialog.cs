@@ -153,7 +153,13 @@ namespace FcMailSend
                     rdTypeTo.Checked = true;
                     break;
             }
+
+            txtEmailAddress.Focus();
         }
 
+        private void ProductReceiverEditDialog_Paint(object sender, PaintEventArgs e)
+        {
+            txtEmailAddress.Focus();
+        }
     }
 }
