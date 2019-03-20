@@ -85,7 +85,7 @@ namespace FcMailSend
                     return;
                 }
 
-                
+
 
                 // 0.打标记
                 product.IsRunning = true;
@@ -93,14 +93,30 @@ namespace FcMailSend
                 Thread.Sleep(40);
 
 
-                // 发送产品前等待时间20190315增加，防止QQ邮箱550错误
-                int timeToWait = sendInterval;
+                // 20190315增加:发送产品前等待时间，防止QQ邮箱550错误
+                // 20190320修改:产品可以单独设置等待时间
+
+                int timeToWait = sendInterval;  // 默认使用全局
+                if (product.IsDelay)            // 如果单个产品有要求
+                {
+                    timeToWait = product.DelaySeconds.Value;
+                }
+
                 while (timeToWait > 0)
                 {
                     product.Note = string.Format(@"发送前等待{0}秒...", timeToWait);
                     bgWorker.ReportProgress(1);
                     Thread.Sleep(1000);
                     timeToWait--;
+
+                    // 取消事件快速响应
+                    if (true == bgWorker.CancellationPending)       // 取消事件
+                    {
+                        product.Note = string.Format(@"手工取消...");
+                        bgWorker.ReportProgress(1);
+                        e.Cancel = true;
+                        return;
+                    }
                 }
 
 

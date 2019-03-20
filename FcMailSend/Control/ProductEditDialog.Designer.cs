@@ -58,9 +58,16 @@
             this.rbCreditYes = new System.Windows.Forms.RadioButton();
             this.rbCreditNo = new System.Windows.Forms.RadioButton();
             this.gbIsCredit = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numWaitSeconds = new System.Windows.Forms.NumericUpDown();
+            this.rbWaitSpecific = new System.Windows.Forms.RadioButton();
+            this.rbWaitGlobal = new System.Windows.Forms.RadioButton();
             this.ctxAttachment.SuspendLayout();
             this.ctxReceiver.SuspendLayout();
             this.gbIsCredit.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWaitSeconds)).BeginInit();
             this.SuspendLayout();
             // 
             // btnReset
@@ -87,7 +94,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(645, 18);
+            this.label2.Location = new System.Drawing.Point(602, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 12);
             this.label2.TabIndex = 4;
@@ -96,7 +103,7 @@
             // cbDisable
             // 
             this.cbDisable.AutoSize = true;
-            this.cbDisable.Location = new System.Drawing.Point(710, 17);
+            this.cbDisable.Location = new System.Drawing.Point(667, 12);
             this.cbDisable.Name = "cbDisable";
             this.cbDisable.Size = new System.Drawing.Size(48, 16);
             this.cbDisable.TabIndex = 5;
@@ -237,7 +244,7 @@
             this.lvReceiver.Location = new System.Drawing.Point(77, 81);
             this.lvReceiver.MultiSelect = false;
             this.lvReceiver.Name = "lvReceiver";
-            this.lvReceiver.Size = new System.Drawing.Size(699, 92);
+            this.lvReceiver.Size = new System.Drawing.Size(499, 92);
             this.lvReceiver.TabIndex = 14;
             this.lvReceiver.UseCompatibleStateImageBehavior = false;
             this.lvReceiver.View = System.Windows.Forms.View.Details;
@@ -250,7 +257,7 @@
             // chReceiverEmailAddress
             // 
             this.chReceiverEmailAddress.Text = "收件人地址";
-            this.chReceiverEmailAddress.Width = 559;
+            this.chReceiverEmailAddress.Width = 368;
             // 
             // chReceiverType
             // 
@@ -314,18 +321,78 @@
             // 
             this.gbIsCredit.Controls.Add(this.rbCreditYes);
             this.gbIsCredit.Controls.Add(this.rbCreditNo);
-            this.gbIsCredit.Location = new System.Drawing.Point(510, 9);
+            this.gbIsCredit.Location = new System.Drawing.Point(461, 9);
             this.gbIsCredit.Name = "gbIsCredit";
             this.gbIsCredit.Size = new System.Drawing.Size(115, 50);
             this.gbIsCredit.TabIndex = 18;
             this.gbIsCredit.TabStop = false;
             this.gbIsCredit.Text = "是否信用批次";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.numWaitSeconds);
+            this.groupBox1.Controls.Add(this.rbWaitSpecific);
+            this.groupBox1.Controls.Add(this.rbWaitGlobal);
+            this.groupBox1.Location = new System.Drawing.Point(604, 81);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(165, 92);
+            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "邮件发送前等待时间(秒):";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(9, 65);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(143, 24);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "*某些邮箱有发送频率限制\r\n需设置延迟防止退信";
+            // 
+            // numWaitSeconds
+            // 
+            this.numWaitSeconds.Location = new System.Drawing.Point(76, 38);
+            this.numWaitSeconds.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numWaitSeconds.Name = "numWaitSeconds";
+            this.numWaitSeconds.Size = new System.Drawing.Size(45, 21);
+            this.numWaitSeconds.TabIndex = 2;
+            // 
+            // rbWaitSpecific
+            // 
+            this.rbWaitSpecific.AutoSize = true;
+            this.rbWaitSpecific.Location = new System.Drawing.Point(11, 43);
+            this.rbWaitSpecific.Name = "rbWaitSpecific";
+            this.rbWaitSpecific.Size = new System.Drawing.Size(59, 16);
+            this.rbWaitSpecific.TabIndex = 1;
+            this.rbWaitSpecific.TabStop = true;
+            this.rbWaitSpecific.Text = "自定义";
+            this.rbWaitSpecific.UseVisualStyleBackColor = true;
+            this.rbWaitSpecific.CheckedChanged += new System.EventHandler(this.rbWaitType_CheckedChanged);
+            // 
+            // rbWaitGlobal
+            // 
+            this.rbWaitGlobal.AutoSize = true;
+            this.rbWaitGlobal.Location = new System.Drawing.Point(11, 20);
+            this.rbWaitGlobal.Name = "rbWaitGlobal";
+            this.rbWaitGlobal.Size = new System.Drawing.Size(95, 16);
+            this.rbWaitGlobal.TabIndex = 0;
+            this.rbWaitGlobal.TabStop = true;
+            this.rbWaitGlobal.Text = "采用全局设置";
+            this.rbWaitGlobal.UseVisualStyleBackColor = true;
+            this.rbWaitGlobal.CheckedChanged += new System.EventHandler(this.rbWaitType_CheckedChanged);
+            // 
             // ProductEditDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(788, 468);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbIsCredit);
             this.Controls.Add(this.lvReceiver);
             this.Controls.Add(this.lvAttachment);
@@ -357,10 +424,14 @@
             this.Controls.SetChildIndex(this.lvAttachment, 0);
             this.Controls.SetChildIndex(this.lvReceiver, 0);
             this.Controls.SetChildIndex(this.gbIsCredit, 0);
+            this.Controls.SetChildIndex(this.groupBox1, 0);
             this.ctxAttachment.ResumeLayout(false);
             this.ctxReceiver.ResumeLayout(false);
             this.gbIsCredit.ResumeLayout(false);
             this.gbIsCredit.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numWaitSeconds)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -397,5 +468,10 @@
         private System.Windows.Forms.RadioButton rbCreditYes;
         private System.Windows.Forms.RadioButton rbCreditNo;
         private System.Windows.Forms.GroupBox gbIsCredit;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.NumericUpDown numWaitSeconds;
+        private System.Windows.Forms.RadioButton rbWaitSpecific;
+        private System.Windows.Forms.RadioButton rbWaitGlobal;
+        private System.Windows.Forms.Label label7;
     }
 }

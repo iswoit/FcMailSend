@@ -52,7 +52,9 @@ namespace FcMailSend
                     disable: false,
                     attachmentList: new ProductAttachmentList(),
                     receiverList: new ProductReceiverList(),
-                    isCredit: false);
+                    isCredit: false,
+                    isDelay: false,
+                    delaySeconds: null);
             else
                 product = ProductStorage.ReadProduct(ProductID);
             _product = product;
@@ -66,6 +68,14 @@ namespace FcMailSend
                 rbCreditYes.Checked = true;
             else
                 rbCreditNo.Checked = true;
+            if (Product.IsDelay == false)
+                rbWaitGlobal.Checked = true;
+            else
+            {
+                rbWaitSpecific.Checked = true;
+                numWaitSeconds.Value = Product.DelaySeconds.HasValue ? Product.DelaySeconds.Value : 0;
+            }
+
 
             // 附件
             ResetAttachmentList();
@@ -352,6 +362,15 @@ namespace FcMailSend
             Product.Disable = cbDisable.Checked;
             Product.MailContent = txtMailContent.Text.Replace(System.Environment.NewLine, "\n");
             Product.IsCredit = rbCreditYes.Checked ? true : false;
+            Product.IsDelay = rbWaitSpecific.Checked ? true : false;
+            if(rbWaitSpecific.Checked)
+            {
+                Product.DelaySeconds = int.Parse(numWaitSeconds.Value.ToString());
+            }
+            else
+            {
+                Product.DelaySeconds = null;
+            }
 
             DialogResult dr = MessageBox.Show("确定提交修改?", "确定", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
@@ -384,6 +403,18 @@ namespace FcMailSend
             else
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void rbWaitType_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbWaitGlobal.Checked)
+            {
+                numWaitSeconds.Enabled = false;
+            }
+            else if (rbWaitSpecific.Checked)
+            {
+                numWaitSeconds.Enabled = true;
             }
         }
     }

@@ -39,7 +39,14 @@ namespace FcMailSend
                                 string mailTitle = dr["MailTitle"].ToString();
                                 string mailContent = dr["MailContent"].ToString();
                                 bool disable = bool.Parse(dr["Disable"].ToString());
-                                bool isCredit = bool.Parse(dr["IsCredit"].ToString());  // 2018-12-20是否信用
+                                bool isCredit = bool.Parse(dr["IsCredit"].ToString());              // 2018-12-20是否信用
+                                bool isDelay = bool.Parse(dr["IsDelay"].ToString());                // 2019-03-20发送前延迟是否单独设置
+                                int? delaySeconds = null;                                           // 2019-03-20发送前延迟秒数
+                                if (Convert.IsDBNull(dr["DelaySeconds"]))
+                                    delaySeconds = null;
+                                else
+                                    delaySeconds = int.Parse(dr["DelaySeconds"].ToString());
+
 
                                 // 获取附件列表
                                 ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
@@ -55,7 +62,9 @@ namespace FcMailSend
                                     disable: disable,
                                     attachmentList: attList,
                                     receiverList: receiverList,
-                                    isCredit: isCredit);
+                                    isCredit: isCredit,
+                                    isDelay: isDelay,
+                                    delaySeconds: delaySeconds);
 
                                 productList.Add(product);
                             }//eof while
@@ -103,6 +112,12 @@ namespace FcMailSend
                                 string mailContent = dr["MailContent"].ToString();
                                 bool disable = bool.Parse(dr["Disable"].ToString());
                                 bool isCredit = bool.Parse(dr["IsCredit"].ToString());
+                                bool isDelay = bool.Parse(dr["IsDelay"].ToString());                // 2019-03-20发送前延迟是否单独设置
+                                int? delaySeconds = null;                                           // 2019-03-20发送前延迟秒数
+                                if (Convert.IsDBNull(dr["DelaySeconds"]))
+                                    delaySeconds = null;
+                                else
+                                    delaySeconds = int.Parse(dr["DelaySeconds"].ToString());
 
                                 // 获取附件列表
                                 ProductAttachmentList attList = ReadProductAttachmentList(id, cn);
@@ -118,7 +133,9 @@ namespace FcMailSend
                                     disable: disable,
                                     attachmentList: attList,
                                     receiverList: receiverList,
-                                    isCredit: isCredit);
+                                    isCredit: isCredit,
+                                    isDelay: isDelay,
+                                    delaySeconds: delaySeconds);
                             }
                             else
                             {
@@ -164,13 +181,15 @@ namespace FcMailSend
                             {
                                 // 插入product表
                                 cmd.Parameters.Clear();
-                                cmd.CommandText = "insert into Product(ID, ProductName, MailTitle, MailContent, Disable, IsCredit) values (@ID, @ProductName, @MailTitle, @MailContent, @Disable, @IsCredit)";
+                                cmd.CommandText = "insert into Product(ID, ProductName, MailTitle, MailContent, Disable, IsCredit, IsDelay, DelaySeconds) values (@ID, @ProductName, @MailTitle, @MailContent, @Disable, @IsCredit, @IsDelay, @DelaySeconds)";
                                 cmd.Parameters.Add(new SQLiteParameter("@ID", newID));
                                 cmd.Parameters.Add(new SQLiteParameter("@ProductName", product.ProductName));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailTitle", product.MailTitle));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailContent", product.MailContent));
                                 cmd.Parameters.Add(new SQLiteParameter("@Disable", product.Disable));
                                 cmd.Parameters.Add(new SQLiteParameter("@IsCredit", product.IsCredit));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsDelay", product.IsDelay));
+                                cmd.Parameters.Add(new SQLiteParameter("@DelaySeconds", product.DelaySeconds));
                                 cmd.ExecuteNonQuery();
 
                                 // 插入attachment表
@@ -232,13 +251,15 @@ namespace FcMailSend
                             {
                                 // 1.更新product表
                                 cmd.Parameters.Clear();
-                                cmd.CommandText = "update Product set ProductName=@ProductName, MailTitle=@MailTitle, MailContent=@MailContent,Disable=@Disable,IsCredit=@IsCredit where ID=@ID";
+                                cmd.CommandText = "update Product set ProductName=@ProductName, MailTitle=@MailTitle, MailContent=@MailContent,Disable=@Disable,IsCredit=@IsCredit, IsDelay=@IsDelay, DelaySeconds=@DelaySeconds  where ID=@ID";
                                 cmd.Parameters.Add(new SQLiteParameter("@ID", product.Id));
                                 cmd.Parameters.Add(new SQLiteParameter("@ProductName", product.ProductName));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailTitle", product.MailTitle));
                                 cmd.Parameters.Add(new SQLiteParameter("@MailContent", product.MailContent));
                                 cmd.Parameters.Add(new SQLiteParameter("@Disable", product.Disable));
                                 cmd.Parameters.Add(new SQLiteParameter("@IsCredit", product.IsCredit));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsDelay", product.IsDelay));
+                                cmd.Parameters.Add(new SQLiteParameter("@DelaySeconds", product.DelaySeconds));
                                 cmd.ExecuteNonQuery();
 
 

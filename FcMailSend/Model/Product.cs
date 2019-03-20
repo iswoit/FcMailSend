@@ -15,6 +15,9 @@ namespace FcMailSend
         private string _mailContent;                        // 邮件正文
         private bool _disable = true;                       // 是否禁用(默认不启用)
         private bool _isCredit = false;                     // 是否信用批次（默认关）
+        private bool _isDelay = false;                      // 是否自定义延迟时间（false就用全局变量20190320）
+        private int? _delaySeconds;                         // 配合_isDelay使用，延迟时间
+
         private ProductAttachmentList _attachmentList;      // 附件列表
         private ProductReceiverList _receiverList;          // 收件人列表
 
@@ -61,6 +64,19 @@ namespace FcMailSend
             get { return _isCredit; }
             set { _isCredit = value; }
         }
+
+        public bool IsDelay
+        {
+            get { return _isDelay; }
+            set { _isDelay = value; }
+        }
+
+        public int? DelaySeconds
+        {
+            get { return _delaySeconds; }
+            set { _delaySeconds = value; }
+        }
+
 
         public ProductAttachmentList ProductAttachmentList
         {
@@ -110,7 +126,9 @@ namespace FcMailSend
             bool disable,
             ProductAttachmentList attachmentList,
             ProductReceiverList receiverList,
-            bool isCredit)
+            bool isCredit,
+            bool isDelay,
+            int? delaySeconds)
         {
             _id = id;
             _productName = productName;
@@ -120,6 +138,8 @@ namespace FcMailSend
             _attachmentList = attachmentList;
             _receiverList = receiverList;
             _isCredit = isCredit;
+            _isDelay = isDelay;
+            _delaySeconds = delaySeconds;
         }
 
         #endregion
