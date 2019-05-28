@@ -59,6 +59,7 @@
             this.Name = "AboutDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "关于...";
             this.ResumeLayout(false);
             this.PerformLayout();

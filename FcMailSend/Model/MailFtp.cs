@@ -11,6 +11,7 @@ namespace FcMailSend
         private string _ftpServer;
         private string _userName;
         private string _password;
+        private string _defaultPath;
 
 
         #region 属性
@@ -43,6 +44,13 @@ namespace FcMailSend
             get { return _password; }
             set { _password = value; }
         }
+
+        public string DefaultPath
+        {
+            get { return _defaultPath; }
+            set { _defaultPath = value; }
+        }
+
         #endregion
 
 
@@ -51,13 +59,15 @@ namespace FcMailSend
             string ftpDesc,
             string ftpServer,
             string userName,
-            string password)
+            string password,
+            string defaultPath)
         {
             _id = id;
             _ftpDesc = ftpDesc;
             _ftpServer = ftpServer;
             _userName = userName;
             _password = password;
+            _defaultPath = defaultPath;
         }
     }
 }

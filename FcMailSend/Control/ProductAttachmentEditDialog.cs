@@ -106,7 +106,7 @@ namespace FcMailSend
         {
             if (DialogResult == DialogResult.OK)
             {
-                if(!ValidateFtpSel())
+                if (!ValidateFtpSel())
                 {
                     DialogResult result = MessageBox.Show("请选择FTP连接串", "格式", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     cbFtp.Focus();
@@ -185,6 +185,23 @@ namespace FcMailSend
                 cbFtp.Enabled = true;
         }
 
+        private void cbFtp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbFtp.SelectedItem != null)
+            {
+                int tmpFtpId = ((ComboBoxFtpItem)cbFtp.SelectedItem).Value;
 
+                foreach (MailFtp ftp in FtpList)
+                {
+                    if (tmpFtpId == ftp.Id)
+                    {
+                        txtPath.Text = ftp.DefaultPath;
+                        break;
+                    }
+                }
+            }
+
+
+        }
     }
 }

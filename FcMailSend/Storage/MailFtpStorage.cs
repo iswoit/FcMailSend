@@ -35,8 +35,9 @@ namespace FcMailSend
                                 string ftpServer = dr["FtpServer"].ToString();
                                 string userName = dr["UserName"].ToString();
                                 string password = dr["Password"].ToString();
+                                string defaultPath = dr["DefaultPath"].ToString();
 
-                                MailFtp mailFtp = new MailFtp(id, ftpDesc, ftpServer, userName, password);
+                                MailFtp mailFtp = new MailFtp(id, ftpDesc, ftpServer, userName, password, defaultPath);
 
 
                                 mailFtpList.Add(mailFtp);
@@ -84,8 +85,9 @@ namespace FcMailSend
                             string ftpServer = dr["FtpServer"].ToString();
                             string userName = dr["UserName"].ToString();
                             string password = dr["Password"].ToString();
+                            string defaultPath = dr["DefaultPath"].ToString();
 
-                            mailFtp = new MailFtp(id, ftpDesc, ftpServer, userName, password);
+                            mailFtp = new MailFtp(id, ftpDesc, ftpServer, userName, password, defaultPath);
 
                         }//eof dr
                     }//eof cmd
@@ -113,11 +115,12 @@ namespace FcMailSend
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
 
-                        cmd.CommandText = string.Format(@"insert into MailFtp (FtpDesc, FtpServer, UserName, Password) values (@FtpDesc, @FtpServer, @UserName, @Password);");
+                        cmd.CommandText = string.Format(@"insert into MailFtp (FtpDesc, FtpServer, UserName, Password, DefaultPath) values (@FtpDesc, @FtpServer, @UserName, @Password, @DefaultPath);");
                         cmd.Parameters.Add(new SQLiteParameter("@FtpDesc", mailFtp.FtpDesc));
                         cmd.Parameters.Add(new SQLiteParameter("@FtpServer", mailFtp.FtpServer));
                         cmd.Parameters.Add(new SQLiteParameter("@UserName", mailFtp.UserName));
                         cmd.Parameters.Add(new SQLiteParameter("@Password", mailFtp.Password));
+                        cmd.Parameters.Add(new SQLiteParameter("@DefaultPath", mailFtp.DefaultPath));
 
                         cmd.ExecuteNonQuery();
 
@@ -145,11 +148,12 @@ namespace FcMailSend
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
 
-                        cmd.CommandText = string.Format(@"update MailFtp set FtpDesc=@FtpDesc, FtpServer=@FtpServer, UserName=@UserName, Password=@Password where ID=@ID;");
+                        cmd.CommandText = string.Format(@"update MailFtp set FtpDesc=@FtpDesc, FtpServer=@FtpServer, UserName=@UserName, Password=@Password, DefaultPath=@DefaultPath where ID=@ID;");
                         cmd.Parameters.Add(new SQLiteParameter("@FtpDesc", mailFtp.FtpDesc));
                         cmd.Parameters.Add(new SQLiteParameter("@FtpServer", mailFtp.FtpServer));
                         cmd.Parameters.Add(new SQLiteParameter("@UserName", mailFtp.UserName));
                         cmd.Parameters.Add(new SQLiteParameter("@Password", mailFtp.Password));
+                        cmd.Parameters.Add(new SQLiteParameter("@DefaultPath", mailFtp.DefaultPath));
                         cmd.Parameters.Add(new SQLiteParameter("@ID", mailFtp.Id));
 
                         cmd.ExecuteNonQuery();

@@ -47,6 +47,7 @@ namespace FcMailSend
                 txtFtpServer.Text = string.Empty;
                 txtUserName.Text = string.Empty;
                 txtPassword.Text = string.Empty;
+                txtDefaultPath.Text = string.Empty;
             }
             else
             {
@@ -56,6 +57,7 @@ namespace FcMailSend
                 txtFtpServer.Text = MailFtp.FtpServer;
                 txtUserName.Text = MailFtp.UserName;
                 txtPassword.Text = MailFtp.Password;
+                txtDefaultPath.Text = MailFtp.DefaultPath;
             }
         }
 
@@ -75,12 +77,13 @@ namespace FcMailSend
                 string ftpServer = txtFtpServer.Text.Trim();
                 string userName = txtUserName.Text.Trim();
                 string password = txtPassword.Text.Trim();
+                string defaultPath = txtDefaultPath.Text.Trim();
 
 
                 // 如果MailFtp为空，则是新增
                 if (MailFtp == null)
                 {
-                    MailFtp mailFtp = new MailFtp(0, ftpDesc, ftpServer, userName, password);
+                    MailFtp mailFtp = new MailFtp(0, ftpDesc, ftpServer, userName, password, defaultPath);
                     MailFtpStorage.AddMailFtp(mailFtp);
                 }
                 else
@@ -89,11 +92,12 @@ namespace FcMailSend
                     MailFtp.FtpServer = ftpServer;
                     MailFtp.UserName = userName;
                     MailFtp.Password = password;
+                    MailFtp.DefaultPath = defaultPath;
 
                     MailFtpStorage.UpdateMailFtp(MailFtp);
                 }
 
-                
+
 
                 MessageBox.Show("保存完成!");
             }

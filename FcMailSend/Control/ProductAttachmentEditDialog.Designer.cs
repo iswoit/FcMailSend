@@ -85,6 +85,7 @@
             this.cbFtp.Name = "cbFtp";
             this.cbFtp.Size = new System.Drawing.Size(112, 20);
             this.cbFtp.TabIndex = 8;
+            this.cbFtp.SelectedIndexChanged += new System.EventHandler(this.cbFtp_SelectedIndexChanged);
             // 
             // rdFtp
             // 
